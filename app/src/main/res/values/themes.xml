@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.VendeSinInmobiliarias" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.VendeSinInmobiliarias" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/primary_acent</item>
@@ -14,7 +14,7 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="TextInputLayout">
         <item name="android:textColorHint">@color/primary</item>
         <item name="android:textColorPrimary">@color/primary</item>
         <item name="android:textColor">@color/primary</item>
