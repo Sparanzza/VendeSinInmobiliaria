@@ -77,10 +77,13 @@
             android:text="Log In"
             android:background="#13c1ac"
             android:textColor="@color/white"
-            android:layout_marginBottom="60dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginBottom="30dp"
             android:layout_marginTop="60dp"/>
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/logInGoogleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>º
     </LinearLayout>
 
     <LinearLayout
