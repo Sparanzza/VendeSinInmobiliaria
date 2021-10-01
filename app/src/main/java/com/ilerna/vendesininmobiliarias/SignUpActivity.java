@@ -70,7 +70,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private boolean isFilledFieldsValid(String username, String email, String password, String confirmPassword) {
-
         // @formatter:off
         if (!username.isEmpty() && !email.isEmpty() && !password.isEmpty() && !confirmPassword.isEmpty()){
             if (!Utils.isEmailAddressValid(email)) { Toast.makeText(this, "The email is not valid", Toast.LENGTH_LONG).show(); return false; }
@@ -78,10 +77,9 @@ public class SignUpActivity extends AppCompatActivity {
             if (password.length() < 8 ) { Toast.makeText(this, "the password must be more than 7 characters", Toast.LENGTH_SHORT).show(); return false; }
             return true;
         }
-
         Toast.makeText(this, "There are fields empties", Toast.LENGTH_LONG).show();
-        // @formatter:on
         return false;
+        // @formatter:on
     }
 
     private void createUser(String username, String email, String password) {
