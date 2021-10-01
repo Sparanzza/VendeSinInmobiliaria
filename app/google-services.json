@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "539834171638",
+    "project_id": "vendesi-6cd6e",
+    "storage_bucket": "vendesi-6cd6e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539834171638:android:595fc88f17397445452cd7",
+        "android_client_info": {
+          "package_name": "com.ilerna.vendesininmobiliarias"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539834171638-ineve5v87vpm9liv3m5o4rquiq31hls1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ilerna.vendesininmobiliarias",
+            "certificate_hash": "e6fa6694e7e3e2ec5a540a99393f255a03521046"
+          }
+        },
+        {
+          "client_id": "539834171638-murur4supmionovjjdp9t71hbsrp2mg3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD24l-RXqIi4_4hfP0jLj6KI8APsFM416A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "539834171638-murur4supmionovjjdp9t71hbsrp2mg3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -22,7 +22,7 @@
                 android:layout_height="70dp"
                 app:tint="@color/white"
                 android:layout_marginTop="60dp"
-                android:src="@drawable/ic_vendesi_white"></ImageView>
+                android:src="@drawable/ic_vendesi_white"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/ic_hello"></ImageView>
+                android:src="@drawable/ic_hello"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,6 +63,7 @@
                     android:layout_height="wrap_content"
                     android:theme="@style/TextInputLayout">
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/usernameEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="User name"
@@ -89,6 +90,7 @@
                     android:layout_height="wrap_content"
                     android:theme="@style/TextInputLayout">
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/emailEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Email Address"
@@ -114,6 +116,7 @@
                     android:layout_height="wrap_content"
                     android:theme="@style/TextInputLayout">
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/passwordEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Password"
@@ -139,6 +142,7 @@
                     android:layout_height="wrap_content"
                     android:theme="@style/TextInputLayout">
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/confirmPasswordEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Confirm Password"
@@ -147,6 +151,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
             <Button
+                android:id="@+id/registerButton"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="Register"
@@ -164,5 +169,5 @@
         android:layout_height="32dp"
         app:tint="@color/white"
         android:layout_margin="10dp"
-        android:src="@drawable/ic_arrow_left_24"></ImageView>
+        android:src="@drawable/ic_arrow_left_24"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

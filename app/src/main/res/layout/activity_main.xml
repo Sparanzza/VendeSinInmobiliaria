@@ -37,6 +37,7 @@
             android:theme="@style/TextInputLayout">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email Address"
@@ -61,6 +62,7 @@
             android:layout_height="wrap_content"
             android:theme="@style/TextInputLayout">
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password"
@@ -69,6 +71,7 @@
         </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         <Button
+            android:id="@+id/logInButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Log In"
@@ -96,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:id="@+id/textViewSignUp"
+            android:id="@+id/signUpTextView"
             android:text="Sign Up"/>
     </LinearLayout>
 
