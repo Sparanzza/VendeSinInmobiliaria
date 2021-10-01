@@ -14,7 +14,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.ilerna.vendesininmobiliarias.Utils.Utils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -27,6 +31,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     // Firebase
     FirebaseAuth firebaseAuth;
+    FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +44,9 @@ public class SignUpActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.passwordEditText);
         confirmPasswordEditText = findViewById(R.id.confirmPasswordEditText);
         registerButton = findViewById(R.id.registerButton);
+
         firebaseAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
 
         arrowBack.setOnClickListener(view -> finish());
         registerButton.setOnClickListener(view -> {
@@ -59,7 +66,7 @@ public class SignUpActivity extends AppCompatActivity {
         Log.d("password", confirmPassword);
 
         if (!isFilledFieldsValid(username, email, password, confirmPassword)) return;
-        createUser(email, password);
+        createUser(username, email, password);
     }
 
     private boolean isFilledFieldsValid(String username, String email, String password, String confirmPassword) {
@@ -77,10 +84,19 @@ public class SignUpActivity extends AppCompatActivity {
         return false;
     }
 
-    private void createUser(String email, String password) {
+    private void createUser(String username, String email, String password) {
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) Toast.makeText(this, "It was not possible to register the user: " + email, Toast.LENGTH_SHORT).show();
-            else Toast.makeText(this, "The user : " + email + " was created successfully!", Toast.LENGTH_SHORT).show();
+            if (!task.isSuccessful()) {
+                Toast.makeText(this, "It was not possible to register the user: " + email, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String userUID = firebaseAuth.getCurrentUser().getUid();
+            Map<String, Object> userData = new HashMap<>();
+            userData.put("username", username);
+            userData.put("email", email);
+            firestore.collection("users").document(userUID).set(userData).addOnCompleteListener(task1 -> Toast.makeText(SignUpActivity.this, "The user : " + email + " was created successfully!", Toast.LENGTH_SHORT).show());
+
         });
     }
 
