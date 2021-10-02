@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">VendeSinInmobiliarias</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="home_title_fragment">Home fragment</string>
+    <string name="chats_title_fragment">Chats fragment</string>
+    <string name="profile_title_fragment">Profile fragment</string>
+    <string name="filters_title_fragment">Filters fragment</string>
 </resources>
