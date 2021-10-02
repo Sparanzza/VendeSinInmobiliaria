@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuthProvider fap;
     UsersProvider up;
 
+    LoadingDialog loadingDialog;
+
     private GoogleSignInClient mGoogleSignInClient;
     private final int RC_SIGN_IN = 1;
 
@@ -63,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
         // Hack Fix Center logInGoogleButton text
         TextView textView = (TextView) logInGoogleButton.getChildAt(0);
         textView.setText("Connect with Google ...      ");
+
+        loadingDialog = new LoadingDialog(MainActivity.this);
 
         fap = new FirebaseAuthProvider();
         up = new UsersProvider();
@@ -83,12 +87,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void login() {
+        loadingDialog.start();
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
         Log.d("EMAIL_INPUT_TEXT", email);
         Log.d("PASSWORD_INPUT_TEXT", password);
 
         fap.loginWithMailAndPassword(email, password).addOnCompleteListener(task -> {
+            loadingDialog.dismiss();
             if (task.isSuccessful()) {
                 Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                 startActivity(intent);
@@ -134,10 +140,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private boolean isUserExist(String userUid) {
-        AtomicReference<Boolean> success = new AtomicReference<>();
-        success.set(false);
+    private void isUserExist(String userUid) {
         up.getUser(userUid).addOnSuccessListener(documentSnapshot -> {
+            loadingDialog.dismiss();
             if (documentSnapshot.exists()) {
                 startActivityToHome();
             } else {
@@ -157,8 +162,6 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
-
-        return success.get();
     }
 
     private void startActivityToHome() {
@@ -171,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loginGoogle() {
+        loadingDialog.start();
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         // This method wait a action from the user, in this case, select an Google account
         startActivityForResult(signInIntent, RC_SIGN_IN);

@@ -32,6 +32,8 @@ public class SignUpActivity extends AppCompatActivity {
     FirebaseAuthProvider fap;
     UsersProvider up;
 
+    LoadingDialog loadingDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +50,11 @@ public class SignUpActivity extends AppCompatActivity {
         fap = new FirebaseAuthProvider();
         up = new UsersProvider();
 
+        loadingDialog = new LoadingDialog(SignUpActivity.this);
+
         arrowBack.setOnClickListener(view -> finish());
         registerButton.setOnClickListener(view -> {
+            loadingDialog.start();
             signUp();
         });
     }
@@ -77,6 +82,7 @@ public class SignUpActivity extends AppCompatActivity {
             if (password.length() < 8 ) { Toast.makeText(this, "the password must be more than 7 characters", Toast.LENGTH_SHORT).show(); return false; }
             return true;
         }
+        loadingDialog.dismiss();
         Toast.makeText(this, "There are fields empties", Toast.LENGTH_LONG).show();
         return false;
         // @formatter:on
@@ -84,8 +90,10 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void createUser(String username, String email, String password) {
         fap.registerUser(email, password).addOnCompleteListener(task -> {
+            loadingDialog.dismiss();
             if (!task.isSuccessful()) {
                 Toast.makeText(this, "It was not possible to register the user: " + email, Toast.LENGTH_SHORT).show();
+                loadingDialog.dismiss();
                 return;
             }
 
@@ -93,7 +101,10 @@ public class SignUpActivity extends AppCompatActivity {
             user.setEmail(email);
             user.setUsername(username);
             user.setId(fap.getCurrentUid());
-            up.create(user).addOnCompleteListener(task1 -> Toast.makeText(SignUpActivity.this, "The user : " + email + " was created successfully!", Toast.LENGTH_SHORT).show());
+            up.create(user).addOnCompleteListener(task1 -> {
+                loadingDialog.dismiss();
+                Toast.makeText(SignUpActivity.this, "The user : " + email + " was created successfully!", Toast.LENGTH_SHORT).show();
+            });
         });
     }
 
