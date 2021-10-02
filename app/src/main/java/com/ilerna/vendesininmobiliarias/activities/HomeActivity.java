@@ -1,8 +1,10 @@
-package com.ilerna.vendesininmobiliarias;
+package com.ilerna.vendesininmobiliarias.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.ilerna.vendesininmobiliarias.R;
 
 public class HomeActivity extends AppCompatActivity {
 

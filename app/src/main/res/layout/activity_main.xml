@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -83,6 +83,9 @@
         <com.google.android.gms.common.SignInButton
             android:id="@+id/logInGoogleButton"
             android:layout_width="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"/>º
     </LinearLayout>
 

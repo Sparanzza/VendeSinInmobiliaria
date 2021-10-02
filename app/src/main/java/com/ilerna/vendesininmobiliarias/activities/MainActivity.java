@@ -1,4 +1,4 @@
-package com.ilerna.vendesininmobiliarias;
+package com.ilerna.vendesininmobiliarias.activities;
 
 import static java.util.Objects.requireNonNull;
 
@@ -19,7 +19,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
@@ -27,12 +26,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.ilerna.vendesininmobiliarias.R;
+import com.ilerna.vendesininmobiliarias.models.User;
+import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
+import com.ilerna.vendesininmobiliarias.providers.UsersProvider;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,9 +44,9 @@ public class MainActivity extends AppCompatActivity {
     Button logInButton;
     SignInButton logInGoogleButton;
 
-    // Firebase
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firestore;
+    FirebaseAuthProvider fap;
+    UsersProvider up;
+
     private GoogleSignInClient mGoogleSignInClient;
     private final int RC_SIGN_IN = 1;
 
@@ -59,8 +60,12 @@ public class MainActivity extends AppCompatActivity {
         logInButton = findViewById(R.id.logInButton);
         logInGoogleButton = findViewById(R.id.logInGoogleButton);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firestore = FirebaseFirestore.getInstance();
+        // Hack Fix Center logInGoogleButton text
+        TextView textView = (TextView) logInGoogleButton.getChildAt(0);
+        textView.setText("Connect with Google ...      ");
+
+        fap = new FirebaseAuthProvider();
+        up = new UsersProvider();
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -69,11 +74,8 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
         logInButton.setOnClickListener(view -> login());
-
         logInGoogleButton.setOnClickListener(view -> loginGoogle());
-
         signUpTextView.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
             startActivity(intent);
@@ -83,18 +85,15 @@ public class MainActivity extends AppCompatActivity {
     private void login() {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
-        Log.d("email", email);
-        Log.d("password", password);
+        Log.d("EMAIL_INPUT_TEXT", email);
+        Log.d("PASSWORD_INPUT_TEXT", password);
 
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(MainActivity.this, "username or password are not valid" + email, Toast.LENGTH_LONG).show();
-                }
+        fap.loginWithMailAndPassword(email, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(MainActivity.this, "username or password are not valid" + email, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -119,12 +118,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, task -> {
+        fap.firebaseAuthWithGoogle(idToken).addOnCompleteListener(this, task -> {
             if (task.isSuccessful()) {
                 // Sign in success, update UI with the signed-in user's information
                 Log.d("FIREBASE_AUTH_GOOGLE", "signInWithCredential:success");
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                FirebaseUser user = fap.getCurrentUser();
                 updateUI(user);
                 isUserExist(user != null ? user.getUid() : null);
             } else {
@@ -139,16 +137,18 @@ public class MainActivity extends AppCompatActivity {
     private boolean isUserExist(String userUid) {
         AtomicReference<Boolean> success = new AtomicReference<>();
         success.set(false);
-        firestore.collection("users").document(userUid).get().addOnSuccessListener(documentSnapshot -> {
+        up.getUser(userUid).addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 startActivityToHome();
             } else {
-                String email = requireNonNull(firebaseAuth.getCurrentUser()).getEmail();
-                String username = firebaseAuth.getCurrentUser().getEmail().split("@")[0];
-                Map<String, Object> userData = new HashMap<>();
-                userData.put("email", email);
-                userData.put("username", username);
-                firestore.collection("users").document(userUid).set(userData).addOnCompleteListener(task -> {
+                String email = fap.getCurrentEmail();
+                String username = email.split("@")[0];
+                User user = new User();
+                user.setEmail(email);
+                user.setUsername(username);
+                user.setId(userUid);
+
+                up.create(user).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         startActivityToHome();
                     } else {
