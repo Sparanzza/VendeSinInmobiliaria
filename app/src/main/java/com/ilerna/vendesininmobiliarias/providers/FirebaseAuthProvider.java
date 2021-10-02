@@ -6,7 +6,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import javax.annotation.Nullable;
 
@@ -26,6 +25,10 @@ public class FirebaseAuthProvider {
     public Task<AuthResult> firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         return firebaseAuth.signInWithCredential(credential);
+    }
+
+    public Task<AuthResult> registerUser(String email, String password){
+        return firebaseAuth.createUserWithEmailAndPassword(email, password);
     }
 
     public @Nullable
