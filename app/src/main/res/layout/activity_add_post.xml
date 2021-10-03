@@ -210,7 +210,7 @@
                         android:layout_height="wrap_content"
                         android:theme="@style/TextInputLayout">
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/title"
+                            android:id="@+id/titleEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Title"
@@ -238,7 +238,7 @@
                         android:layout_height="wrap_content"
                         android:theme="@style/TextInputLayout">
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/description"
+                            android:id="@+id/descriptionEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Descripition"
@@ -267,7 +267,7 @@
                         android:layout_height="wrap_content"
                         android:theme="@style/TextInputLayout">
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/price"
+                            android:id="@+id/priceEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Price"
@@ -308,6 +308,7 @@
                             app:cardCornerRadius="5dp"
                             app:cardElevation="6dp">
                             <ImageView
+                                android:id="@+id/imageViewFlats"
                                 android:layout_width="match_parent"
                                 android:layout_height="55dp"
                                 android:src="@drawable/ic_flat"
@@ -338,6 +339,7 @@
                             app:cardCornerRadius="5dp"
                             app:cardElevation="6dp">
                             <ImageView
+                                android:id="@+id/imageViewHomes"
                                 android:layout_width="match_parent"
                                 android:layout_height="55dp"
                                 android:src="@drawable/ic_home"
@@ -368,6 +370,7 @@
                             app:cardCornerRadius="5dp"
                             app:cardElevation="6dp">
                             <ImageView
+                                android:id="@+id/imageViewFields"
                                 android:layout_width="match_parent"
                                 android:layout_height="55dp"
                                 android:src="@drawable/ic_field"
@@ -398,6 +401,7 @@
                             app:cardCornerRadius="5dp"
                             app:cardElevation="6dp">
                             <ImageView
+                                android:id="@+id/imageViewOffices"
                                 android:layout_width="match_parent"
                                 android:layout_height="55dp"
                                 android:src="@drawable/ic_office"
@@ -436,6 +440,7 @@
                             app:cardCornerRadius="5dp"
                             app:cardElevation="6dp">
                             <ImageView
+                                android:id="@+id/imageViewStorages"
                                 android:layout_width="match_parent"
                                 android:layout_height="55dp"
                                 android:src="@drawable/ic_storageroom"
@@ -466,6 +471,7 @@
                             app:cardCornerRadius="5dp"
                             app:cardElevation="6dp">
                             <ImageView
+                                android:id="@+id/imageViewGarages"
                                 android:layout_width="match_parent"
                                 android:layout_height="55dp"
                                 android:src="@drawable/ic_garage"
@@ -496,6 +502,7 @@
                             app:cardCornerRadius="5dp"
                             app:cardElevation="6dp">
                             <ImageView
+                                android:id="@+id/imageViewFactories"
                                 android:layout_width="match_parent"
                                 android:layout_height="55dp"
                                 android:src="@drawable/ic_factory"
@@ -526,6 +533,7 @@
                             app:cardCornerRadius="5dp"
                             app:cardElevation="6dp">
                             <ImageView
+                                android:id="@+id/imageViewCommercials"
                                 android:layout_width="match_parent"
                                 android:layout_height="55dp"
                                 android:src="@drawable/ic_shop"

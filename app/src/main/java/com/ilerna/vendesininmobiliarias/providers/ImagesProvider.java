@@ -31,6 +31,11 @@ public class ImagesProvider {
     UploadTask save(Context context, File file) {
         byte[] imageBytes = Utils.bitmapCompresor(file);
         StorageReference storage = storageRef.child(file.getName());
+        storageRef = storage;
         return storage.putBytes(imageBytes);
+    }
+
+    public StorageReference getStorage(){
+        return storageRef;
     }
 }
