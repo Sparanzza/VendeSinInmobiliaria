@@ -1,5 +1,6 @@
 package com.ilerna.vendesininmobiliarias.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ilerna.vendesininmobiliarias.R;
+import com.ilerna.vendesininmobiliarias.activities.AddPostActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +28,9 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    View view;
+    FloatingActionButton fab;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -58,9 +64,16 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        view = inflater.inflate(R.layout.fragment_home, container, false);
+        fab = view.findViewById(R.id.fab);
+        fab.setOnClickListener(view -> goToPost());
+        return view;
+    }
+
+    private void goToPost() {
+        Intent intent = new Intent(getContext(), AddPostActivity.class);
+        startActivity(intent);
     }
 }

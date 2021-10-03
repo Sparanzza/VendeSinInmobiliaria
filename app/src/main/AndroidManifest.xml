@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VendeSinInmobiliarias">
         <activity
+            android:name=".activities.AddPostActivity"
+            android:exported="true" />
+        <activity
             android:name=".activities.HomeActivity"
             android:exported="true" />
         <activity
