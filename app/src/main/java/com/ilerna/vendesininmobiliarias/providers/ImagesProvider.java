@@ -24,18 +24,13 @@ public class ImagesProvider {
     StorageReference storageRef;
 
     public ImagesProvider() {
-        storageRef = FirebaseStorage.getInstance().getReference("images");
+        storageRef = FirebaseStorage.getInstance().getReference("Images");
     }
 
     public @Nullable
     UploadTask save(Context context, File file) {
-        try {
-            byte[] imageBytes = Utils.bitmapCompresor(new FileInputStream(file));
-            StorageReference storage = storageRef.child(file.getName());
-            return storage.putBytes(imageBytes);
-        } catch (Exception ex) {
-            Log.d("ERROR", "Error saving file on database " + ex.getMessage());
-        }
-        return null;
+        byte[] imageBytes = Utils.bitmapCompresor(file);
+        StorageReference storage = storageRef.child(file.getName());
+        return storage.putBytes(imageBytes);
     }
 }

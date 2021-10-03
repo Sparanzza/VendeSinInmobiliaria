@@ -12,6 +12,7 @@ import android.util.Log;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -120,14 +121,19 @@ public interface Utils {
 
     // Bitmap compresor
     // https://stackoverflow.com/questions/8417034/how-to-make-bitmap-compress-without-change-the-bitmap-size
-    static byte[] bitmapCompresor(InputStream in) {
-        Bitmap original = BitmapFactory.decodeStream(in);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        original.compress(Bitmap.CompressFormat.JPEG, 50, out);
-        // Bitmap decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
-        Log.e("Original   dimensions", original.getWidth() + " " + original.getHeight());
-        // Log.e("Compressed dimensions", decoded.getWidth() + " " + decoded.getHeight());
-        return out.toByteArray();
+    static byte[] bitmapCompresor(File file) {
+        try {
+            Bitmap original = BitmapFactory.decodeStream(new FileInputStream(file));
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            original.compress(Bitmap.CompressFormat.JPEG, 50, out);
+            // Bitmap decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
+            Log.e("Original   dimensions", original.getWidth() + " " + original.getHeight());
+            // Log.e("Compressed dimensions", decoded.getWidth() + " " + decoded.getHeight());
+            return out.toByteArray();
+        } catch (Exception ex) {
+            Log.d("ERROR", "Error saving file on database " + ex.getMessage());
+            return new byte[0];
+        }
 
     }
 }
