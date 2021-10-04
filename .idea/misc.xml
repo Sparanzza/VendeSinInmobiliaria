@@ -7,7 +7,7 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.7322916666666667" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.7322916666666667" />
         <entry key="app/src/main/res/drawable/ic_vendesi.xml" value="0.9380208333333333" />
-        <entry key="app/src/main/res/layout/activity_add_post.xml" value="0.15331807780320367" />
+        <entry key="app/src/main/res/layout/activity_add_post.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.3556231003039514" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_post.xml" value="0.7161458333333334" />

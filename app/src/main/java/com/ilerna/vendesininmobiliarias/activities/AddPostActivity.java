@@ -26,6 +26,8 @@ import java.util.List;
 
 public class AddPostActivity extends AppCompatActivity {
 
+    ImageView arrowBack;
+
     ImageView imageView0, imageView1, imageView2, imageView3, imageView4, imageView5, imageView6, imageView7;
     ImageView imageViewHomes, imageViewOffices, imageViewFactories, imageViewFlats, imageViewStorages, imageViewFields, imageViewGarages, imageViewCommercials;
     List<ImageView> imageViews;
@@ -118,6 +120,9 @@ public class AddPostActivity extends AppCompatActivity {
         urlsImagesUploaded = new String[8];
         loadingDialog = new LoadingDialog(AddPostActivity.this);
 
+        // Back to home activity
+        arrowBack = findViewById(R.id.arrowBack);
+        arrowBack.setOnClickListener(view -> finish());
     }
 
     private void setCategoryColor(ImageView iview) {
@@ -170,6 +175,7 @@ public class AddPostActivity extends AppCompatActivity {
             pp.createPost(post).addOnCompleteListener(taskCreatePost -> {
                 if (taskCreatePost.isSuccessful()) {
                     Toast.makeText(this, "The Post was uploaded successfully.", Toast.LENGTH_LONG).show();
+                    finish();
                 } else {
                     Toast.makeText(this, "There was an error to upload the post.", Toast.LENGTH_LONG).show();
                 }
