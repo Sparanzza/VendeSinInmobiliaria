@@ -1,16 +1,23 @@
 package com.ilerna.vendesininmobiliarias.activities;
 
+import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.FileProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.ilerna.vendesininmobiliarias.R;
@@ -21,7 +28,10 @@ import com.ilerna.vendesininmobiliarias.providers.ImagesProvider;
 import com.ilerna.vendesininmobiliarias.providers.PostsProvider;
 
 import java.io.File;
+import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class AddPostActivity extends AppCompatActivity {
@@ -31,7 +41,6 @@ public class AddPostActivity extends AppCompatActivity {
     ImageView imageView0, imageView1, imageView2, imageView3, imageView4, imageView5, imageView6, imageView7;
     ImageView imageViewHomes, imageViewOffices, imageViewFactories, imageViewFlats, imageViewStorages, imageViewFields, imageViewGarages, imageViewCommercials;
     List<ImageView> imageViews;
-    File fileImage1, fileImage2, fileImage3, fileImage4, fileImage5, fileImage6, fileImage7, fileImage8;
     File fileImages[];
     Button createButton;
 
@@ -43,6 +52,7 @@ public class AddPostActivity extends AppCompatActivity {
     final int GALLERY_RC_5 = 5;
     final int GALLERY_RC_6 = 6;
     final int GALLERY_RC_7 = 7;
+    final int GALLERY_RC_OFFSET = 10;
 
     TextInputEditText titleEditText;
     TextInputEditText descriptionEditText;
@@ -57,6 +67,12 @@ public class AddPostActivity extends AppCompatActivity {
     FirebaseAuthProvider fap;
 
     LoadingDialog loadingDialog;
+    AlertDialog.Builder selectorImageSrc;
+    CharSequence[] options;
+
+    String photoCameraPath;
+    String photoCameraAbsolutePath;
+    File photoCameraFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,14 +90,14 @@ public class AddPostActivity extends AppCompatActivity {
         imageView6 = findViewById(R.id.imageView6);
         imageView7 = findViewById(R.id.imageView7);
 
-        imageView0.setOnClickListener(view -> { openGallery(GALLERY_RC_0); });
-        imageView1.setOnClickListener(view -> { openGallery(GALLERY_RC_1); });
-        imageView2.setOnClickListener(view -> { openGallery(GALLERY_RC_2); });
-        imageView3.setOnClickListener(view -> { openGallery(GALLERY_RC_3); });
-        imageView4.setOnClickListener(view -> { openGallery(GALLERY_RC_4); });
-        imageView5.setOnClickListener(view -> { openGallery(GALLERY_RC_5); });
-        imageView6.setOnClickListener(view -> { openGallery(GALLERY_RC_6); });
-        imageView7.setOnClickListener(view -> { openGallery(GALLERY_RC_7); });
+        imageView0.setOnClickListener(view -> { selectImageSrc(GALLERY_RC_0); });
+        imageView1.setOnClickListener(view -> { selectImageSrc(GALLERY_RC_1); });
+        imageView2.setOnClickListener(view -> { selectImageSrc(GALLERY_RC_2); });
+        imageView3.setOnClickListener(view -> { selectImageSrc(GALLERY_RC_3); });
+        imageView4.setOnClickListener(view -> { selectImageSrc(GALLERY_RC_4); });
+        imageView5.setOnClickListener(view -> { selectImageSrc(GALLERY_RC_5); });
+        imageView6.setOnClickListener(view -> { selectImageSrc(GALLERY_RC_6); });
+        imageView7.setOnClickListener(view -> { selectImageSrc(GALLERY_RC_7); });
 
         imageViews = Arrays.asList(imageView0,imageView1, imageView2, imageView3, imageView4, imageView5, imageView6, imageView7);
 
@@ -119,6 +135,9 @@ public class AddPostActivity extends AppCompatActivity {
         fileImages = new File[8];
         urlsImagesUploaded = new String[8];
         loadingDialog = new LoadingDialog(AddPostActivity.this);
+        selectorImageSrc = new AlertDialog.Builder(this);
+        selectorImageSrc.setTitle("Select source");
+        options = new CharSequence[]{"Image from Gallery", "Photo from camera"};
 
         // Back to home activity
         arrowBack = findViewById(R.id.arrowBack);
@@ -187,11 +206,45 @@ public class AddPostActivity extends AppCompatActivity {
         }
     }
 
+    private void selectImageSrc(int requestCode) {
+        selectorImageSrc.setItems(options, (dialogInterface, i) -> {
+            if (i == 0) openGallery(requestCode);
+            if (i == 1) openCamera(requestCode);
+        });
+        selectorImageSrc.show();
+    }
 
     private void openGallery(int requestCode) {
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
         galleryIntent.setType("image/*");
         startActivityForResult(galleryIntent, requestCode);
+    }
+
+    @SuppressLint("QueryPermissionsNeeded")
+    private void openCamera(int requestCode) {
+        Intent photoCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (photoCameraIntent.resolveActivity(getPackageManager()) != null) {
+            try {
+                File file = takePhotoFromCamera();
+                if (file != null) {
+                    Uri uri = FileProvider.getUriForFile(this, "com.ilerna.vendesininmobiliarias", file);
+                    photoCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                    startActivityForResult(photoCameraIntent, requestCode + GALLERY_RC_OFFSET);
+                }
+            } catch (Exception ex) {
+                Toast.makeText(this, "An error ocurred on open the camera.", Toast.LENGTH_LONG).show();
+            }
+
+        }
+    }
+
+    private File takePhotoFromCamera() throws IOException {
+        File directory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File photo = File.createTempFile(new Timestamp(new Date().getTime()) + "_photo", ".jpg", directory);
+        photoCameraPath = "file:" + photo.getAbsolutePath();
+        photoCameraAbsolutePath = photo.getAbsolutePath();
+        photoCameraFile = photo;
+        return photo;
     }
 
     @Override
@@ -203,7 +256,14 @@ public class AddPostActivity extends AppCompatActivity {
 
     private void setImageFromFile(int RC, Intent data) {
         try {
-            fileImages[RC] = Utils.from(this, data.getData());
+            Uri uri;
+            if (RC > GALLERY_RC_OFFSET) {
+                uri = Uri.fromFile(photoCameraFile);
+                RC = RC - GALLERY_RC_OFFSET;
+            } else {
+                uri = data.getData();
+            }
+            fileImages[RC] = Utils.from(this, uri);
             imageViews.get(RC).setImageBitmap(BitmapFactory.decodeFile(fileImages[RC].getAbsolutePath()));
             imageViews.get(RC).clearColorFilter();
             imageViews.get(RC).setBackgroundTintList(null);

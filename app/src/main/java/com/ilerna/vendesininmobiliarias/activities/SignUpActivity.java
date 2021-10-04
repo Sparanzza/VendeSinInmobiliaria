@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -33,7 +34,6 @@ public class SignUpActivity extends AppCompatActivity {
     UsersProvider up;
 
     LoadingDialog loadingDialog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
