@@ -54,6 +54,8 @@ public class AddPostActivity extends AppCompatActivity {
     PostsProvider pp;
     FirebaseAuthProvider fap;
 
+    LoadingDialog loadingDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,6 +116,8 @@ public class AddPostActivity extends AppCompatActivity {
 
         fileImages = new File[8];
         urlsImagesUploaded = new String[8];
+        loadingDialog = new LoadingDialog(AddPostActivity.this);
+
     }
 
     private void setCategoryColor(ImageView iview) {
@@ -135,6 +139,8 @@ public class AddPostActivity extends AppCompatActivity {
     }
 
     private void createPost() {
+        loadingDialog.start();
+
         String title = titleEditText.getText().toString();
         String description = descriptionEditText.getText().toString();
         String price = priceEditText.getText().toString();
@@ -167,12 +173,12 @@ public class AddPostActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(this, "There was an error to upload the post.", Toast.LENGTH_LONG).show();
                 }
+                loadingDialog.dismiss();
             });
 
         } else {
             Toast.makeText(this, "There are empty fields!", Toast.LENGTH_LONG).show();
         }
-
     }
 
 
@@ -185,6 +191,7 @@ public class AddPostActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        loadingDialog.start();
         setImageFromFile(requestCode, data);
     }
 
@@ -197,6 +204,7 @@ public class AddPostActivity extends AppCompatActivity {
             imageViews.get(RC).getDrawable().setTintList(null);
             uploadImageToFirebase(fileImages[RC], RC);
         } catch (Exception ex) {
+            loadingDialog.dismiss();
             Log.d("ERROR", "Error loading file from gallery");
             Toast.makeText(this, "Error trying to opening gallery " + ex.getMessage(), Toast.LENGTH_LONG).show();
         }
@@ -205,6 +213,7 @@ public class AddPostActivity extends AppCompatActivity {
     private void uploadImageToFirebase(File fileImage, int RC) {
         ip.save(this, fileImage).addOnSuccessListener(task -> {
             ip.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
+                loadingDialog.dismiss();
                 String url = uri.toString();
                 urlsImagesUploaded[RC] = url;
                 Toast.makeText(this, "The images is uploaded.", Toast.LENGTH_LONG).show();
