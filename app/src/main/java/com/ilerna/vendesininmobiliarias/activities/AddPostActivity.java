@@ -1,50 +1,53 @@
 package com.ilerna.vendesininmobiliarias.activities;
 
-import androidx.annotation.NonNull;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.BitmapFactory;
-import android.graphics.PorterDuff;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.storage.UploadTask;
 import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.Utils.Utils;
 import com.ilerna.vendesininmobiliarias.models.Post;
 import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
 import com.ilerna.vendesininmobiliarias.providers.ImagesProvider;
 import com.ilerna.vendesininmobiliarias.providers.PostsProvider;
-import com.ilerna.vendesininmobiliarias.providers.UsersProvider;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 public class AddPostActivity extends AppCompatActivity {
 
-    ImageView imageView1, imageView2, imageView3, imageView4, imageView5, imageView6, imageView7, imageView8;
+    ImageView imageView0, imageView1, imageView2, imageView3, imageView4, imageView5, imageView6, imageView7;
     ImageView imageViewHomes, imageViewOffices, imageViewFactories, imageViewFlats, imageViewStorages, imageViewFields, imageViewGarages, imageViewCommercials;
-
-    File fileImage;
+    List<ImageView> imageViews;
+    File fileImage1, fileImage2, fileImage3, fileImage4, fileImage5, fileImage6, fileImage7, fileImage8;
+    File fileImages[];
     Button createButton;
-    final int GALLERY_RC = 1;
+
+    final int GALLERY_RC_0 = 0;
+    final int GALLERY_RC_1 = 1;
+    final int GALLERY_RC_2 = 2;
+    final int GALLERY_RC_3 = 3;
+    final int GALLERY_RC_4 = 4;
+    final int GALLERY_RC_5 = 5;
+    final int GALLERY_RC_6 = 6;
+    final int GALLERY_RC_7 = 7;
 
     TextInputEditText titleEditText;
     TextInputEditText descriptionEditText;
     TextInputEditText priceEditText;
 
     String category = "";
+    String[] urlsImagesUploaded;
 
     // Providers
     ImagesProvider ip;
@@ -58,6 +61,7 @@ public class AddPostActivity extends AppCompatActivity {
 
         // @formatter:off
         // Pictures
+        imageView0 = findViewById(R.id.imageView0);
         imageView1 = findViewById(R.id.imageView1);
         imageView2 = findViewById(R.id.imageView2);
         imageView3 = findViewById(R.id.imageView3);
@@ -65,16 +69,17 @@ public class AddPostActivity extends AppCompatActivity {
         imageView5 = findViewById(R.id.imageView5);
         imageView6 = findViewById(R.id.imageView6);
         imageView7 = findViewById(R.id.imageView7);
-        imageView8 = findViewById(R.id.imageView8);
 
-        imageView1.setOnClickListener(view -> { openGallery(); });
-        imageView2.setOnClickListener(view -> { openGallery(); });
-        imageView3.setOnClickListener(view -> { openGallery(); });
-        imageView4.setOnClickListener(view -> { openGallery(); });
-        imageView5.setOnClickListener(view -> { openGallery(); });
-        imageView6.setOnClickListener(view -> { openGallery(); });
-        imageView7.setOnClickListener(view -> { openGallery(); });
-        imageView8.setOnClickListener(view -> { openGallery(); });
+        imageView0.setOnClickListener(view -> { openGallery(GALLERY_RC_0); });
+        imageView1.setOnClickListener(view -> { openGallery(GALLERY_RC_1); });
+        imageView2.setOnClickListener(view -> { openGallery(GALLERY_RC_2); });
+        imageView3.setOnClickListener(view -> { openGallery(GALLERY_RC_3); });
+        imageView4.setOnClickListener(view -> { openGallery(GALLERY_RC_4); });
+        imageView5.setOnClickListener(view -> { openGallery(GALLERY_RC_5); });
+        imageView6.setOnClickListener(view -> { openGallery(GALLERY_RC_6); });
+        imageView7.setOnClickListener(view -> { openGallery(GALLERY_RC_7); });
+
+        imageViews = Arrays.asList(imageView0,imageView1, imageView2, imageView3, imageView4, imageView5, imageView6, imageView7);
 
         //Categories
         imageViewHomes = findViewById(R.id.imageViewHomes);
@@ -106,6 +111,9 @@ public class AddPostActivity extends AppCompatActivity {
         ip = new ImagesProvider();
         pp = new PostsProvider();
         fap = new FirebaseAuthProvider();
+
+        fileImages = new File[8];
+        urlsImagesUploaded = new String[8];
     }
 
     private void setCategoryColor(ImageView iview) {
@@ -137,11 +145,29 @@ public class AddPostActivity extends AppCompatActivity {
         }
 
         if (!title.isEmpty() && !description.isEmpty() && !price.isEmpty()) {
-            if (fileImage != null) {
-                saveImage(title, description, price);
-            } else {
-                Toast.makeText(this, "Please, select at least one image.", Toast.LENGTH_LONG).show();
-            }
+            Post post = new Post();
+            post.setTitle(title);
+            post.setDescription(description);
+            post.setPrice(price);
+            post.setCategory(category);
+
+            post.setImage0(urlsImagesUploaded[0]);
+            post.setImage1(urlsImagesUploaded[1]);
+            post.setImage2(urlsImagesUploaded[2]);
+            post.setImage3(urlsImagesUploaded[3]);
+            post.setImage4(urlsImagesUploaded[4]);
+            post.setImage5(urlsImagesUploaded[5]);
+            post.setImage6(urlsImagesUploaded[6]);
+            post.setImage7(urlsImagesUploaded[7]);
+
+            post.setUserUid(fap.getCurrentUid());
+            pp.createPost(post).addOnCompleteListener(taskCreatePost -> {
+                if (taskCreatePost.isSuccessful()) {
+                    Toast.makeText(this, "The Post was uploaded successfully.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "There was an error to upload the post.", Toast.LENGTH_LONG).show();
+                }
+            });
 
         } else {
             Toast.makeText(this, "There are empty fields!", Toast.LENGTH_LONG).show();
@@ -149,54 +175,40 @@ public class AddPostActivity extends AppCompatActivity {
 
     }
 
-    private void saveImage(String title, String description, String price) {
-        ip.save(this, fileImage).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                ip.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
-                    String url = uri.toString();
-                    Post post = new Post();
-                    post.setTitle(title);
-                    post.setDescription(description);
-                    post.setPrice(price);
-                    post.setCategory(category);
-                    post.setImage1(url);
-                    post.setUserUid(fap.getCurrentUid());
-                    pp.createPost(post).addOnCompleteListener(taskCreatePost -> {
-                        if (taskCreatePost.isSuccessful()) {
-                            Toast.makeText(this, "The Post was uploaded successfully.", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(this, "There was an error to upload the post.", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                });
-                Toast.makeText(this, "The images is uploaded.", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "The images was not uploaded.", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
 
-    private void openGallery() {
+    private void openGallery(int requestCode) {
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
         galleryIntent.setType("image/*");
-        startActivityForResult(galleryIntent, GALLERY_RC);
+        startActivityForResult(galleryIntent, requestCode);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GALLERY_RC) {
-            try {
-                fileImage = Utils.from(this, data.getData());
-                imageView1.setImageBitmap(BitmapFactory.decodeFile(fileImage.getAbsolutePath()));
-                imageView1.clearColorFilter();
-                imageView1.setBackgroundTintList(null);
-                imageView1.getDrawable().setTintList(null);
-            } catch (Exception ex) {
-                Log.d("ERROR", "Error loading file from gallery");
-                Toast.makeText(this, "Error trying to opening gallery " + ex.getMessage(), Toast.LENGTH_LONG).show();
-            }
+        setImageFromFile(requestCode, data);
+    }
 
+    private void setImageFromFile(int RC, Intent data) {
+        try {
+            fileImages[RC] = Utils.from(this, data.getData());
+            imageViews.get(RC).setImageBitmap(BitmapFactory.decodeFile(fileImages[RC].getAbsolutePath()));
+            imageViews.get(RC).clearColorFilter();
+            imageViews.get(RC).setBackgroundTintList(null);
+            imageViews.get(RC).getDrawable().setTintList(null);
+            uploadImageToFirebase(fileImages[RC], RC);
+        } catch (Exception ex) {
+            Log.d("ERROR", "Error loading file from gallery");
+            Toast.makeText(this, "Error trying to opening gallery " + ex.getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void uploadImageToFirebase(File fileImage, int RC) {
+        ip.save(this, fileImage).addOnSuccessListener(task -> {
+            ip.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
+                String url = uri.toString();
+                urlsImagesUploaded[RC] = url;
+                Toast.makeText(this, "The images is uploaded.", Toast.LENGTH_LONG).show();
+            });
+        });
     }
 }

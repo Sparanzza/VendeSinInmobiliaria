@@ -7,6 +7,7 @@ public class Post {
     private String description;
     private String category;
     private String price;
+    private String image0;
     private String image1;
     private String image2;
     private String image3;
@@ -14,19 +15,19 @@ public class Post {
     private String image5;
     private String image6;
     private String image7;
-    private String image8;
 
     private String userUid;
 
     public Post() {
     }
 
-    public Post(String id, String title, String description, String category, String price, String image1, String image2, String image3, String image4, String image5, String image6, String image7, String image8, String userUid) {
+    public Post(String id, String title, String description, String category, String price, String image0, String image1, String image2, String image3, String image4, String image5, String image6, String image7, String userUid) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.category = category;
         this.price = price;
+        this.image0 = image0;
         this.image1 = image1;
         this.image2 = image2;
         this.image3 = image3;
@@ -34,7 +35,6 @@ public class Post {
         this.image5 = image5;
         this.image6 = image6;
         this.image7 = image7;
-        this.image8 = image8;
         this.userUid = userUid;
     }
 
@@ -76,6 +76,14 @@ public class Post {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getImage0() {
+        return image0;
+    }
+
+    public void setImage0(String image0) {
+        this.image0 = image0;
     }
 
     public String getImage1() {
@@ -132,14 +140,6 @@ public class Post {
 
     public void setImage7(String image7) {
         this.image7 = image7;
-    }
-
-    public String getImage8() {
-        return image8;
-    }
-
-    public void setImage8(String image8) {
-        this.image8 = image8;
     }
 
     public String getUserUid() {
