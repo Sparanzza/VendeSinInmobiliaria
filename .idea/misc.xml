@@ -7,16 +7,18 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.7322916666666667" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.7322916666666667" />
         <entry key="app/src/main/res/drawable/ic_vendesi.xml" value="0.9380208333333333" />
-        <entry key="app/src/main/res/layout/activity_add_post.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_add_post.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.3556231003039514" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_post.xml" value="0.7161458333333334" />
         <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.1662531017369727" />
+        <entry key="app/src/main/res/layout/dropdown_item.xml" value="0.365702479338843" />
         <entry key="app/src/main/res/layout/fragment_chats.xml" value="0.921875" />
         <entry key="app/src/main/res/layout/fragment_filters.xml" value="0.921875" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.921875" />
         <entry key="app/src/main/res/layout/loading_dialog.xml" value="0.67" />
+        <entry key="app/src/main/res/menu/boolean_menu.xml" value="0.921875" />
         <entry key="app/src/main/res/menu/bottom_navigation_menu.xml" value="0.921875" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.45416666666666666" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.6848958333333334" />

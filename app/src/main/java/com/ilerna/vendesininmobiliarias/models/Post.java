@@ -3,10 +3,12 @@ package com.ilerna.vendesininmobiliarias.models;
 public class Post {
 
     private String id;
+
     private String title;
     private String description;
     private String category;
     private String price;
+
     private String image0;
     private String image1;
     private String image2;
@@ -18,10 +20,25 @@ public class Post {
 
     private String userUid;
 
+    private String bedroom;
+    private String bathroom;
+    private String sqm;
+    private String floor;
+    private String antiquity;
+    private String parking;
+    private String status;
+    private String elevator;
+    private String heating;
+    private String ac;
+    private String orientation;
+    private String furnished;
+    private String consumption;
+    private String emissions;
+
     public Post() {
     }
 
-    public Post(String id, String title, String description, String category, String price, String image0, String image1, String image2, String image3, String image4, String image5, String image6, String image7, String userUid) {
+    public Post(String id, String title, String description, String category, String price, String image0, String image1, String image2, String image3, String image4, String image5, String image6, String image7, String userUid, String bedroom, String bathroom, String sqm, String floor, String antiquity, String parking, String status, String elevator, String heating, String ac, String orientation, String furnished, String consumption, String emissions) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -36,6 +53,20 @@ public class Post {
         this.image6 = image6;
         this.image7 = image7;
         this.userUid = userUid;
+        this.bedroom = bedroom;
+        this.bathroom = bathroom;
+        this.sqm = sqm;
+        this.floor = floor;
+        this.antiquity = antiquity;
+        this.parking = parking;
+        this.status = status;
+        this.elevator = elevator;
+        this.heating = heating;
+        this.ac = ac;
+        this.orientation = orientation;
+        this.furnished = furnished;
+        this.consumption = consumption;
+        this.emissions = emissions;
     }
 
     public String getId() {
@@ -148,5 +179,117 @@ public class Post {
 
     public void setUserUid(String userUid) {
         this.userUid = userUid;
+    }
+
+    public String getBedroom() {
+        return bedroom;
+    }
+
+    public void setBedroom(String bedroom) {
+        this.bedroom = bedroom;
+    }
+
+    public String getBathroom() {
+        return bathroom;
+    }
+
+    public void setBathroom(String bathroom) {
+        this.bathroom = bathroom;
+    }
+
+    public String getSqm() {
+        return sqm;
+    }
+
+    public void setSqm(String sqm) {
+        this.sqm = sqm;
+    }
+
+    public String getFloor() {
+        return floor;
+    }
+
+    public void setFloor(String floor) {
+        this.floor = floor;
+    }
+
+    public String getAntiquity() {
+        return antiquity;
+    }
+
+    public void setAntiquity(String antiquity) {
+        this.antiquity = antiquity;
+    }
+
+    public String getParking() {
+        return parking;
+    }
+
+    public void setParking(String parking) {
+        this.parking = parking;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getElevator() {
+        return elevator;
+    }
+
+    public void setElevator(String elevator) {
+        this.elevator = elevator;
+    }
+
+    public String getHeating() {
+        return heating;
+    }
+
+    public void setHeating(String heating) {
+        this.heating = heating;
+    }
+
+    public String getAc() {
+        return ac;
+    }
+
+    public void setAc(String ac) {
+        this.ac = ac;
+    }
+
+    public String getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(String orientation) {
+        this.orientation = orientation;
+    }
+
+    public String getFurnished() {
+        return furnished;
+    }
+
+    public void setFurnished(String furnished) {
+        this.furnished = furnished;
+    }
+
+    public String getConsumption() {
+        return consumption;
+    }
+
+    public void setConsumption(String consumption) {
+        this.consumption = consumption;
+    }
+
+    public String getEmissions() {
+        return emissions;
+    }
+
+    public void setEmissions(String emissions) {
+        this.emissions = emissions;
     }
 }

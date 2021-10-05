@@ -9,8 +9,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -19,7 +22,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.Utils.Utils;
 import com.ilerna.vendesininmobiliarias.models.Post;
@@ -74,12 +79,86 @@ public class AddPostActivity extends AppCompatActivity {
     String photoCameraAbsolutePath;
     File photoCameraFile;
 
+    // features
+    AutoCompleteTextView statusEditText;
+    AutoCompleteTextView parkingEditText;
+    AutoCompleteTextView emissionsEditText;
+    AutoCompleteTextView orientationEditText;
+    AutoCompleteTextView energyConsumptionEditText;
+    AutoCompleteTextView furnishedEditText;
+    AutoCompleteTextView heatingEditText;
+    AutoCompleteTextView acEditText;
+    AutoCompleteTextView elevatorEditText;
+    TextInputEditText bedroomEditText;
+    TextInputEditText bathroomEditText;
+    TextInputEditText sqmEditText;
+    TextInputEditText floorEditText;
+    TextInputEditText antiquityEditText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
 
         // @formatter:off
+
+        //Strings Arrays
+        String[] yesNoStrings = getResources().getStringArray(R.array.yes_no);
+        String[] parkingStrings = getResources().getStringArray(R.array.parking);
+        String[] emissionStrings = getResources().getStringArray(R.array.emission);
+        String[] orientationStrings = getResources().getStringArray(R.array.orientation);
+        String[] statusStrings = getResources().getStringArray(R.array.status);
+
+        // Adapter Arrays
+        ArrayAdapter<String> yesNoAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, R.id.itemTextViewDropDown, yesNoStrings);
+        ArrayAdapter<String> parkingAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, R.id.itemTextViewDropDown, parkingStrings);
+        ArrayAdapter<String> emissionAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, R.id.itemTextViewDropDown, emissionStrings);
+        ArrayAdapter<String> orientationAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, R.id.itemTextViewDropDown, orientationStrings);
+        ArrayAdapter<String> statusAdapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, R.id.itemTextViewDropDown, statusStrings);
+
+        bedroomEditText = findViewById(R.id.bedroomEditText);
+        bathroomEditText = findViewById(R.id.bathroomEditText);
+        sqmEditText = findViewById(R.id.sqmEditText);
+        floorEditText = findViewById(R.id.floorEditText);
+        antiquityEditText = findViewById(R.id.antiquityEditText);
+
+        // Set adapter to features
+        statusEditText = findViewById(R.id.statusEditText);
+        statusEditText.setText(statusAdapter.getItem(0).toString(), false);
+        statusEditText.setAdapter(statusAdapter);
+
+        acEditText = findViewById(R.id.acEditText);
+        acEditText.setText(yesNoAdapter.getItem(0).toString(), false);
+        acEditText.setAdapter(yesNoAdapter);
+
+        heatingEditText = findViewById(R.id.heatingEditText);
+        heatingEditText.setText(yesNoAdapter.getItem(0).toString(), false);
+        heatingEditText.setAdapter(yesNoAdapter);
+
+        furnishedEditText = findViewById(R.id.furnishedEditText);
+        furnishedEditText.setText(yesNoAdapter.getItem(0).toString(), false);
+        furnishedEditText.setAdapter(yesNoAdapter);
+
+        energyConsumptionEditText = findViewById(R.id.energyConsumptionEditText);
+        energyConsumptionEditText.setText(emissionAdapter.getItem(0).toString(), false);
+        energyConsumptionEditText.setAdapter(emissionAdapter);
+
+        emissionsEditText = findViewById(R.id.emissionsEditText);
+        emissionsEditText.setText(emissionAdapter.getItem(0).toString(), false);
+        emissionsEditText.setAdapter(emissionAdapter);
+
+        orientationEditText = findViewById(R.id.orientationEditText);
+        orientationEditText.setText(orientationAdapter.getItem(0).toString(), false);
+        orientationEditText.setAdapter(orientationAdapter);
+
+        parkingEditText = findViewById(R.id.parkingEditText);
+        parkingEditText.setText(parkingAdapter.getItem(0).toString(), false);
+        parkingEditText.setAdapter(parkingAdapter);
+
+        elevatorEditText = findViewById(R.id.elevatorEditText);
+        elevatorEditText.setText(yesNoAdapter.getItem(0).toString(), false);
+        elevatorEditText.setAdapter(yesNoAdapter);
+
         // Pictures
         imageView0 = findViewById(R.id.imageView0);
         imageView1 = findViewById(R.id.imageView1);
@@ -181,6 +260,7 @@ public class AddPostActivity extends AppCompatActivity {
             post.setPrice(price);
             post.setCategory(category);
 
+            // Images
             post.setImage0(urlsImagesUploaded[0]);
             post.setImage1(urlsImagesUploaded[1]);
             post.setImage2(urlsImagesUploaded[2]);
@@ -190,7 +270,25 @@ public class AddPostActivity extends AppCompatActivity {
             post.setImage6(urlsImagesUploaded[6]);
             post.setImage7(urlsImagesUploaded[7]);
 
+            // Id User
             post.setUserUid(fap.getCurrentUid());
+
+            // Features
+            post.setBedroom(bedroomEditText.getText().toString());
+            post.setBathroom(bathroomEditText.getText().toString());
+            post.setSqm(sqmEditText.getText().toString());
+            post.setFloor(floorEditText.getText().toString());
+            post.setAntiquity(antiquityEditText.getText().toString());
+            post.setParking(parkingEditText.getText().toString());
+            post.setStatus(statusEditText.getText().toString());
+            post.setElevator(elevatorEditText.getText().toString());
+            post.setHeating(heatingEditText.getText().toString());
+            post.setAc(acEditText.getText().toString());
+            post.setOrientation(orientationEditText.getText().toString());
+            post.setFurnished(furnishedEditText.getText().toString());
+            post.setEmissions(emissionsEditText.getText().toString());
+            post.setConsumption(energyConsumptionEditText.getText().toString());
+
             pp.createPost(post).addOnCompleteListener(taskCreatePost -> {
                 if (taskCreatePost.isSuccessful()) {
                     Toast.makeText(this, "The Post was uploaded successfully.", Toast.LENGTH_LONG).show();
@@ -202,6 +300,7 @@ public class AddPostActivity extends AppCompatActivity {
             });
 
         } else {
+            loadingDialog.dismiss();
             Toast.makeText(this, "There are empty fields!", Toast.LENGTH_LONG).show();
         }
     }
@@ -232,6 +331,7 @@ public class AddPostActivity extends AppCompatActivity {
                     startActivityForResult(photoCameraIntent, requestCode + GALLERY_RC_OFFSET);
                 }
             } catch (Exception ex) {
+                loadingDialog.dismiss();
                 Toast.makeText(this, "An error ocurred on open the camera.", Toast.LENGTH_LONG).show();
             }
 
@@ -257,7 +357,7 @@ public class AddPostActivity extends AppCompatActivity {
     private void setImageFromFile(int RC, Intent data) {
         try {
             Uri uri;
-            if (RC > GALLERY_RC_OFFSET) {
+            if (RC >= GALLERY_RC_OFFSET) {
                 uri = Uri.fromFile(photoCameraFile);
                 RC = RC - GALLERY_RC_OFFSET;
             } else {

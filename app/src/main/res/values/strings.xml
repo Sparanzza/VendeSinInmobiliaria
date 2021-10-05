@@ -5,4 +5,43 @@
     <string name="chats_title_fragment">Chats fragment</string>
     <string name="profile_title_fragment">Profile fragment</string>
     <string name="filters_title_fragment">Filters fragment</string>
+
+    <string-array name="yes_no">
+        <item>-</item>
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    <string-array name="parking">
+        <item>-</item>
+        <item>Yes</item>
+        <item>No</item>
+        <item>Private</item>
+    </string-array>
+    <string-array name="emission">
+        <item>-</item>
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+        <item>E</item>
+        <item>F</item>
+        <item>G</item>
+    </string-array>
+    <string-array name="orientation">
+        <item>-</item>
+        <item>South</item>
+        <item>South-West</item>
+        <item>South-East</item>
+        <item>North</item>
+        <item>North-West</item>
+        <item>North-East</item>
+        <item>West</item>
+        <item>East</item>
+    </string-array>
+    <string-array name="status">
+        <item>-</item>
+        <item>New</item>
+        <item>Good</item>
+        <item>Needs reform</item>
+    </string-array>
 </resources>
