@@ -173,11 +173,22 @@ public class MainActivity extends AppCompatActivity {
         // TODO
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (fap.getCurrentUser() != null) {
+            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //clear all history
+            startActivity(intent);
+        }
+    }
+
     private void loginGoogle() {
         loadingDialog.start();
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         // This method wait a action from the user, in this case, select an Google account
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
 
 }

@@ -27,7 +27,7 @@ public class FirebaseAuthProvider {
         return firebaseAuth.signInWithCredential(credential);
     }
 
-    public Task<AuthResult> registerUser(String email, String password){
+    public Task<AuthResult> registerUser(String email, String password) {
         return firebaseAuth.createUserWithEmailAndPassword(email, password);
     }
 
@@ -48,4 +48,7 @@ public class FirebaseAuthProvider {
         return firebaseAuth.getCurrentUser();
     }
 
+    public void logout() {
+        if (firebaseAuth != null) firebaseAuth.signOut();
+    }
 }
