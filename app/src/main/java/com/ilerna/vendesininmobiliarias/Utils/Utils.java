@@ -6,9 +6,13 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.provider.OpenableColumns;
 import android.util.Log;
+import android.widget.ImageView;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -18,7 +22,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.regex.Pattern;
+
+import javax.annotation.Nullable;
 
 public interface Utils {
 
@@ -131,9 +140,52 @@ public interface Utils {
             // Log.e("Compressed dimensions", decoded.getWidth() + " " + decoded.getHeight());
             return out.toByteArray();
         } catch (Exception ex) {
-            Log.d("ERROR", "Error saving file on database " + ex.getMessage());
+            Log.d("ERROR BITMAP COMPRESSOR", "Error saving file on database " + ex.getMessage());
             return new byte[0];
         }
-
     }
+
+    // https://stackoverflow.com/questions/2471935/how-to-load-an-imageview-by-url-in-android
+    static @Nullable Bitmap unSafeurlToBitmap(String urlImage){
+        try {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            URL url = new URL(urlImage);
+            InputStream inputStream = url.openStream();
+            return BitmapFactory.decodeStream(inputStream);
+        } catch (IOException e) {
+            Log.e("ERROR POST", e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    class ImageDownloadTasK extends AsyncTask<String, Void, Bitmap> {
+        ImageView imageView;
+
+        public ImageDownloadTasK(ImageView imageView) {
+            this.imageView = imageView;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            imageView.setImageBitmap(result);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.getDrawable().setTintList(null);
+
+        }
+    }
+
 }

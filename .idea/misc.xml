@@ -12,6 +12,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_post.xml" value="0.7161458333333334" />
         <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.1662531017369727" />
+        <entry key="app/src/main/res/layout/cardview_post.xml" value="0.5" />
         <entry key="app/src/main/res/layout/dropdown_item.xml" value="0.365702479338843" />
         <entry key="app/src/main/res/layout/fragment_chats.xml" value="0.921875" />
         <entry key="app/src/main/res/layout/fragment_filters.xml" value="0.921875" />

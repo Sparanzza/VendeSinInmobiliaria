@@ -4,14 +4,21 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.Query;
 import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.activities.AddPostActivity;
+import com.ilerna.vendesininmobiliarias.adapters.PostsAdapter;
+import com.ilerna.vendesininmobiliarias.models.Post;
+import com.ilerna.vendesininmobiliarias.providers.PostsProvider;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,12 +32,16 @@ public class HomeFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    RecyclerView postHomeRecyclerView;
+    PostsProvider pp;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     View view;
     FloatingActionButton fab;
+    PostsAdapter postsAdapter;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -55,6 +66,18 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        Query query = pp.getAllPosts();
+        FirestoreRecyclerOptions<Post> options =
+                new FirestoreRecyclerOptions.Builder<Post>()
+                        .setQuery(query, Post.class).build();
+        postsAdapter = new PostsAdapter(options);
+        postHomeRecyclerView.setAdapter(postsAdapter);
+        postsAdapter.startListening(); // Start listening from FireStore database
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -64,11 +87,21 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        postsAdapter.stopListening();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        pp = new PostsProvider();
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
         fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(view -> goToPost());
+        postHomeRecyclerView = view.findViewById(R.id.postHomeRecyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        postHomeRecyclerView.setLayoutManager(linearLayoutManager);
         return view;
     }
 
