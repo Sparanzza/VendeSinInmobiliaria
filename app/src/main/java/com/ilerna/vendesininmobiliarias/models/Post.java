@@ -35,10 +35,12 @@ public class Post {
     private String consumption;
     private String emissions;
 
+    private long timestamp;
+
     public Post() {
     }
 
-    public Post(String id, String title, String description, String category, String price, String image0, String image1, String image2, String image3, String image4, String image5, String image6, String image7, String userUid, String bedroom, String bathroom, String sqm, String floor, String antiquity, String parking, String status, String elevator, String heating, String ac, String orientation, String furnished, String consumption, String emissions) {
+    public Post(String id, String title, String description, String category, String price, String image0, String image1, String image2, String image3, String image4, String image5, String image6, String image7, String userUid, String bedroom, String bathroom, String sqm, String floor, String antiquity, String parking, String status, String elevator, String heating, String ac, String orientation, String furnished, String consumption, String emissions, long timestamp) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -67,6 +69,7 @@ public class Post {
         this.furnished = furnished;
         this.consumption = consumption;
         this.emissions = emissions;
+        this.timestamp = timestamp;
     }
 
     public String getId() {
@@ -292,4 +295,8 @@ public class Post {
     public void setEmissions(String emissions) {
         this.emissions = emissions;
     }
+
+    public long getTimestamp() { return timestamp; }
+
+    public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
 }

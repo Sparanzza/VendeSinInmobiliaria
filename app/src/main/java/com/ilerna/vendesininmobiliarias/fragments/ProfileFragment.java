@@ -1,5 +1,6 @@
 package com.ilerna.vendesininmobiliarias.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,8 +8,19 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ilerna.vendesininmobiliarias.R;
+import com.ilerna.vendesininmobiliarias.Utils.Utils;
+import com.ilerna.vendesininmobiliarias.activities.EditProfileActivity;
+import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
+import com.ilerna.vendesininmobiliarias.providers.ImagesProvider;
+import com.ilerna.vendesininmobiliarias.providers.PostsProvider;
+import com.ilerna.vendesininmobiliarias.providers.UsersProvider;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +37,20 @@ public class ProfileFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    FloatingActionButton editProfileFab;
+    View view;
+
+    ImageView photoProfileImageView;
+    TextView usernameProfileTextView;
+    TextView phoneProfileTextView;
+    TextView emailProfileTextView;
+    TextView totalPostsProfileTextView;
+
+    ImagesProvider ip;
+    UsersProvider up;
+    FirebaseAuthProvider fap;
+    PostsProvider pp;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -61,6 +87,64 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        editProfileFab = view.findViewById(R.id.editProfileFab);
+        usernameProfileTextView = view.findViewById(R.id.usernameProfileTextView);
+        emailProfileTextView = view.findViewById(R.id.emailProfileTextView);
+        phoneProfileTextView = view.findViewById(R.id.phoneProfileTextView);
+        totalPostsProfileTextView = view.findViewById(R.id.totalPostsProfileTextView);
+
+        editProfileFab.setOnClickListener(view -> goToEditProfile());
+
+        ip = new ImagesProvider();
+        up = new UsersProvider();
+        fap = new FirebaseAuthProvider();
+        pp = new PostsProvider();
+
+        getUserProfile();
+        getPosts();
+        return view;
+    }
+
+    private void goToEditProfile() {
+        Intent intent = new Intent(getContext(), EditProfileActivity.class);
+        startActivity(intent);
+    }
+
+    private void getUserProfile() {
+        up.getUser(fap.getCurrentUid()).addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                if (documentSnapshot.contains("username")) {
+                    String username = documentSnapshot.getString("username");
+                    if (username != null && !username.isEmpty())
+                        usernameProfileTextView.setText(username);
+                }
+                if (documentSnapshot.contains("email")) {
+                    String email = documentSnapshot.getString("email");
+                    if (email != null && !email.isEmpty())
+                        emailProfileTextView.setText(email);
+                }
+                if (documentSnapshot.contains("phoneNumber")) {
+                    String phoneNumber = documentSnapshot.getString("phoneNumber");
+                    if (phoneNumber != null && !phoneNumber.isEmpty())
+                        phoneProfileTextView.setText(phoneNumber);
+                }
+                if (documentSnapshot.contains("photoProfile")) {
+                    String photoProfile = documentSnapshot.getString("photoProfile");
+                    if (photoProfile != null && !photoProfile.isEmpty())
+                        new Utils.ImageDownloadTasK((ImageView) view.findViewById(R.id.photoProfileImageView)).execute(photoProfile);
+                }
+            } else {
+                Toast.makeText(getContext(), "The user dosen't exist.", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void getPosts(){
+        pp.getAllPostByUser(fap.getCurrentUid()).get().addOnSuccessListener(queryDocumentSnapshots -> {
+           int totalPosts = queryDocumentSnapshots.size();
+           totalPostsProfileTextView.setText(String.valueOf(totalPosts));
+        });
     }
 }

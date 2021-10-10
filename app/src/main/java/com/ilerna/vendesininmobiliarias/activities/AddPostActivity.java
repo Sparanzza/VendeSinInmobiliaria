@@ -101,7 +101,6 @@ public class AddPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_post);
 
         // @formatter:off
-
         //Strings Arrays
         String[] yesNoStrings = getResources().getStringArray(R.array.yes_no);
         String[] parkingStrings = getResources().getStringArray(R.array.parking);
@@ -288,6 +287,8 @@ public class AddPostActivity extends AppCompatActivity {
             post.setFurnished(furnishedEditText.getText().toString());
             post.setEmissions(emissionsEditText.getText().toString());
             post.setConsumption(energyConsumptionEditText.getText().toString());
+
+            post.setTimestamp(new Date().getTime());
 
             pp.createPost(post).addOnCompleteListener(taskCreatePost -> {
                 if (taskCreatePost.isSuccessful()) {

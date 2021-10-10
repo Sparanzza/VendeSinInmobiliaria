@@ -22,4 +22,8 @@ public class PostsProvider {
         return postCollection.orderBy("title", Query.Direction.DESCENDING);
     }
 
+    public Query getAllPostByUser(String userUid){
+        return postCollection.whereEqualTo("userUid", userUid);
+    }
+
 }

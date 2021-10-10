@@ -108,6 +108,33 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     app:tint="@color/primary_light"
+                    android:src="@drawable/ic_phone"></ImageView>
+                <com.google.android.material.textfield.TextInputLayout
+                    app:boxBackgroundColor="@android:color/transparent"
+                    android:background="@android:color/transparent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/TextInputLayout">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/phoneNumberEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Phone number"
+                        android:inputType="textEmailAddress"
+                        android:outlineProvider="none"></com.google.android.material.textfield.TextInputEditText>
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:tint="@color/primary_light"
                     android:src="@drawable/ic_password_24"></ImageView>
                 <com.google.android.material.textfield.TextInputLayout
                     app:boxBackgroundColor="@android:color/transparent"
