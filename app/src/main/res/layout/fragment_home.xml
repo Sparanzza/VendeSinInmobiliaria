@@ -28,7 +28,7 @@
         android:src="@drawable/ic_add"
         app:maxImageSize="38dp"
         android:layout_margin="16dp"
-        android:backgroundTint="@color/primary_acent"
+        android:backgroundTint="@color/secondary"
         app:tint="@color/white"
         app:borderWidth="0dp"
         android:layout_gravity="bottom|right">

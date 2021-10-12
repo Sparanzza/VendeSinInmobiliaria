@@ -105,36 +105,43 @@
                 android:layout_marginBottom="40dp"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/titleDetailsPostTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Title"
-                    android:textColor="@color/primary"
-                    android:textSize="22dp"
-                    android:textStyle="bold" />
-
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/categoryDetailsPostImageView"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:src="@drawable/ic_flat"
                         app:tint="@color/primary" />
 
-                    <TextView
-                        android:id="@+id/categoryDetailsPostTextView"
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:text="Category" />
+                        android:orientation="vertical">
 
 
+                        <TextView
+                            android:id="@+id/titleDetailsPostTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Title"
+                            android:textColor="@color/primary"
+                            android:textSize="22dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/categoryDetailsPostTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Category" />
+
+
+                    </LinearLayout>
                 </LinearLayout>
 
                 <TextView
@@ -142,9 +149,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Price"
+                    android:textAlignment="viewEnd"
                     android:textColor="@color/primary_acent"
                     android:textSize="32dp"
-                    android:layout_marginTop="10dp"
                     android:textStyle="bold" />
 
                 <View
@@ -841,6 +848,7 @@
                             android:theme="@style/TextInputLayout" />
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -888,7 +896,7 @@
                             android:background="@color/primary_muted" />
 
                         <TextView
-                            android:id="@+id/energyDetailsPostTextView"
+                            android:id="@+id/consumptionDetailsPostTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
@@ -954,13 +962,21 @@
         </LinearLayout>
     </ScrollView>
 
+    <ImageView
+        android:id="@+id/arrowBackPostDetail"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_arrow_left_24"
+        app:tint="@color/white" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/commentDetailsPostFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:backgroundTint="@color/primary_light"
+        android:backgroundTint="@color/secondary"
         android:src="@drawable/ic_comment"
         app:borderWidth="0dp"
         app:maxImageSize="28dp"

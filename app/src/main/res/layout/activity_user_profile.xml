@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.FiltersFragment">
+    tools:context=".activities.UserProfileActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -28,7 +28,8 @@
                     android:src="@drawable/ic_background_social"
                     android:transitionName="transitionnamepicture"
                     app:layout_collapseMode="parallax"
-                    app:tint="@color/primary_light" />
+                    android:alpha=".3"
+                    app:tint="@color/primary_muted" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -65,7 +66,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Profile Name"
-                            android:textColor="@color/primary_acent"
+                            android:textColor="@color/primary_muted"
                             android:textSize="20dp"
                             android:textStyle="bold" />
 
@@ -75,7 +76,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="7dp"
                             android:text="username@domain.com"
-                            android:textColor="@color/primary"
+                            android:textColor="@color/primary_muted"
                             android:textSize="15dp" />
 
                         <TextView
@@ -84,7 +85,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="7dp"
                             android:text="Phone Number"
-                            android:textColor="@color/primary"
+                            android:textColor="@color/primary_muted"
                             android:textSize="15dp" />
 
                         <LinearLayout
@@ -100,7 +101,7 @@
                                 android:layout_marginHorizontal="4dp"
                                 android:layout_marginTop="7dp"
                                 android:text="Total Posts"
-                                android:textColor="@color/primary"
+                                android:textColor="@color/primary_muted"
                                 android:textSize="15dp" />
 
                             <TextView
@@ -109,7 +110,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="7dp"
                                 android:text="0"
-                                android:textColor="@color/primary"
+                                android:textColor="@color/primary_muted"
                                 android:textSize="15dp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -138,18 +139,13 @@
             android:textStyle="italic" />
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/editProfileFab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
-        android:backgroundTint="@color/secondary"
-        android:src="@drawable/ic_outline_edit_24"
-        app:borderWidth="0dp"
-        app:maxImageSize="38dp"
-        app:tint="@color/white">
+    <ImageView
+        android:id="@+id/arrowBackUserProfileDetail"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_arrow_left_24"
+        app:tint="@color/primary_light" />
 
-    </com.google.android.material.floatingactionbutton.FloatingActionButton>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
