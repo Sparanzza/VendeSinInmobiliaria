@@ -1,6 +1,7 @@
 package com.ilerna.vendesininmobiliarias.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.Utils.Utils;
+import com.ilerna.vendesininmobiliarias.activities.DetailsPostActivity;
 import com.ilerna.vendesininmobiliarias.models.Post;
 
 import java.net.URL;
@@ -24,10 +27,11 @@ import java.util.Locale;
 public class PostsAdapter extends FirestoreRecyclerAdapter<Post, PostsAdapter.ViewHolder> {
 
     View view;
+    Context context;
 
-    public PostsAdapter(FirestoreRecyclerOptions<Post> options) {
+    public PostsAdapter(FirestoreRecyclerOptions<Post> options, Context context) {
         super(options);
-
+        this.context = context;
     }
 
     @Override
@@ -61,10 +65,18 @@ public class PostsAdapter extends FirestoreRecyclerAdapter<Post, PostsAdapter.Vi
         else if (model.getImage7() != null && !model.getImage7().isEmpty())
             setMainPhotoPostImageView(model.getImage7());
 
+        view.setOnClickListener(view ->{
+            DocumentSnapshot doc = getSnapshots().getSnapshot(position);
+            Intent intent = new Intent(context, DetailsPostActivity.class);
+            intent.putExtra("postId", doc.getId());
+            context.startActivity(intent);
+
+        });
+
     }
 
     public void setMainPhotoPostImageView(String url) {
-        new Utils.ImageDownloadTasK((ImageView) view.findViewById(R.id.mainPhotoPostImageView)).execute(url);
+        new Utils.ImageDownloadTasK(view.findViewById(R.id.mainPhotoPostImageView)).execute(url);
     }
 
     @NonNull
@@ -85,6 +97,7 @@ public class PostsAdapter extends FirestoreRecyclerAdapter<Post, PostsAdapter.Vi
         TextView floorPostTextView;
         TextView antiquityPostTextView;
         ImageView mainPhotoPostImageView;
+        View viewHolder;
 
         public ViewHolder(View view) {
             super(view);
@@ -98,6 +111,7 @@ public class PostsAdapter extends FirestoreRecyclerAdapter<Post, PostsAdapter.Vi
             floorPostTextView = view.findViewById(R.id.floorPostTextView);
             antiquityPostTextView = view.findViewById(R.id.antiquityPostTextView);
             mainPhotoPostImageView = view.findViewById(R.id.mainPhotoPostImageView);
+            viewHolder = view;
         }
     }
 

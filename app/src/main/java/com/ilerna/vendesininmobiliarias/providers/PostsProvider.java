@@ -2,6 +2,7 @@ package com.ilerna.vendesininmobiliarias.providers;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.ilerna.vendesininmobiliarias.models.Post;
@@ -24,6 +25,10 @@ public class PostsProvider {
 
     public Query getAllPostByUser(String userUid){
         return postCollection.whereEqualTo("userUid", userUid);
+    }
+
+    public Task<DocumentSnapshot> getPostById(String id){
+        return postCollection.document(id).get();
     }
 
 }

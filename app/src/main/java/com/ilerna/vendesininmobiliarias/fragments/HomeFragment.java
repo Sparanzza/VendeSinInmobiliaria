@@ -72,7 +72,7 @@ public class HomeFragment extends Fragment {
         FirestoreRecyclerOptions<Post> options =
                 new FirestoreRecyclerOptions.Builder<Post>()
                         .setQuery(query, Post.class).build();
-        postsAdapter = new PostsAdapter(options);
+        postsAdapter = new PostsAdapter(options, getContext());
         postHomeRecyclerView.setAdapter(postsAdapter);
         postsAdapter.startListening(); // Start listening from FireStore database
     }
