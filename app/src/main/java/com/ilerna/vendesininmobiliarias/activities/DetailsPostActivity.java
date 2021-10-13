@@ -3,6 +3,8 @@ package com.ilerna.vendesininmobiliarias.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.DialogInterface;
@@ -16,21 +18,30 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.Utils.CategoriesEnum;
 import com.ilerna.vendesininmobiliarias.Utils.Utils;
+import com.ilerna.vendesininmobiliarias.adapters.CommentsAdapter;
 import com.ilerna.vendesininmobiliarias.adapters.PostItemAdapter;
+import com.ilerna.vendesininmobiliarias.adapters.PostsAdapter;
+import com.ilerna.vendesininmobiliarias.models.Comment;
+import com.ilerna.vendesininmobiliarias.models.Post;
 import com.ilerna.vendesininmobiliarias.models.SlideItemPost;
+import com.ilerna.vendesininmobiliarias.providers.CommentsProvider;
+import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
 import com.ilerna.vendesininmobiliarias.providers.PostsProvider;
 import com.ilerna.vendesininmobiliarias.providers.UsersProvider;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -65,11 +76,17 @@ public class DetailsPostActivity extends AppCompatActivity {
     private TextView emissionsDetailsPostTextView;
     private FloatingActionButton commentDetailsPostFab;
     private ImageView arrowBackPostDetail;
+    private RecyclerView commentsDetailsPostRecyclerView;
 
     PostsProvider pp;
     UsersProvider up;
+    CommentsProvider cp;
+    FirebaseAuthProvider fap;
+
+    CommentsAdapter commentsAdapter;
 
     String userUid;
+    String postId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +121,7 @@ public class DetailsPostActivity extends AppCompatActivity {
         emissionsDetailsPostTextView = findViewById(R.id.emissionsDetailsPostTextView);
         commentDetailsPostFab = findViewById(R.id.commentDetailsPostFab);
         arrowBackPostDetail = findViewById(R.id.arrowBackPostDetail);
+        commentsDetailsPostRecyclerView = findViewById(R.id.commentsDetailsPostRecyclerView);
 
         arrowBackPostDetail.setOnClickListener(view -> finish());
 
@@ -113,12 +131,36 @@ public class DetailsPostActivity extends AppCompatActivity {
             showDialogInsertComment();
         });
 
-        String postId = getIntent().getStringExtra("postId");
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(DetailsPostActivity.this);
+        commentsDetailsPostRecyclerView.setLayoutManager(linearLayoutManager);
+
+        postId = getIntent().getStringExtra("postId");
         pp = new PostsProvider();
         up = new UsersProvider();
+        cp = new CommentsProvider();
+        fap = new FirebaseAuthProvider();
         getPostById(postId);
 
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Query query = cp.getCommentByPost(postId);
+        FirestoreRecyclerOptions<Comment> options =
+                new FirestoreRecyclerOptions.Builder<Comment>()
+                        .setQuery(query, Comment.class).build();
+        commentsAdapter = new CommentsAdapter(options, DetailsPostActivity.this);
+        commentsDetailsPostRecyclerView.setAdapter(commentsAdapter);
+        commentsAdapter.startListening(); // Start listening from FireStore database
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        commentsAdapter.stopListening();
+    }
+
 
     private void showDialogInsertComment() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(DetailsPostActivity.this);
@@ -146,7 +188,25 @@ public class DetailsPostActivity extends AppCompatActivity {
         dialog.setView(container);
 
         dialog.setPositiveButton("Send", (dialog1, which) -> {
-            String msg = commentEditText.getText().toString();
+            String commentText = commentEditText.getText().toString();
+            if (commentText.isEmpty()) {
+                Toast.makeText(this, "Please, Write the comment for the user", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Comment comment = new Comment();
+            comment.setComment(commentText);
+            comment.setPostId(postId);
+            comment.setUserId(fap.getCurrentUid());
+            comment.setTimestamp(new Date().getTime());
+            cp.createComment(comment).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(this, "Created comment successfully!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Error creating comment", Toast.LENGTH_SHORT).show();
+                }
+            });
+
         });
 
         dialog.setNegativeButton("Cancel", (dialog1, which) -> {
