@@ -50,7 +50,7 @@ public class CommentsAdapter extends FirestoreRecyclerAdapter<Comment, CommentsA
                 if (documentSnapshot.contains("photoProfile")) {
                     String imageUrl = documentSnapshot.getString("photoProfile");
                     if (imageUrl != null && !imageUrl.isEmpty())
-                        new Utils.ImageDownloadTasK(view.findViewById(R.id.photoProfileCardCommentImageView)).execute(imageUrl);
+                        new Utils.ImageDownloadTasK(holder.photoProfileCardCommentImageView).execute(imageUrl);
                 }
             }
         });

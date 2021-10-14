@@ -17,26 +17,26 @@ import java.util.List;
 
 public class PostItemAdapter extends PagerAdapter {
 
-    private Context Mcontext;
+    private Context context;
     private List<SlideItemPost> slideItemPost;
 
-    public PostItemAdapter(Context Mcontext, List<SlideItemPost> theSlideItemsModelClassList) {
-        this.Mcontext = Mcontext;
+    public PostItemAdapter(Context context, List<SlideItemPost> theSlideItemsModelClassList) {
+        this.context = context;
         this.slideItemPost = theSlideItemsModelClassList;
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
 
-        LayoutInflater inflater = (LayoutInflater) Mcontext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View sliderLayout = inflater.inflate(R.layout.details_post_slider, null);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.details_post_slider, null);
 
-        TextView caption_title = sliderLayout.findViewById(R.id.sliderTitle);
+        TextView caption_title = view.findViewById(R.id.sliderTitle);
 
-        new Utils.ImageDownloadTasK((ImageView) sliderLayout.findViewById(R.id.imageSlider)).execute(slideItemPost.get(position).getImage());
+        new Utils.ImageDownloadTasK((ImageView) view.findViewById(R.id.imageSlider)).execute(slideItemPost.get(position).getImage());
         caption_title.setText(slideItemPost.get(position).getTitle());
-        container.addView(sliderLayout);
-        return sliderLayout;
+        container.addView(view);
+        return view;
     }
 
     @Override
