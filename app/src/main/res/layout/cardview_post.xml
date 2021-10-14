@@ -18,7 +18,7 @@
             android:id="@+id/mainPhotoPostImageView"
             android:src="@drawable/ic_picture"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="225dp"
             app:tint="@color/primary_light"
             android:scaleType="center" />
 
@@ -36,6 +36,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:maxLines="1"
+                android:textColor="@color/primary"
+                android:textStyle="bold"
                 android:text="Title post"
                 android:textSize="14dp" />
 
@@ -48,7 +50,7 @@
                 android:textStyle="bold"
                 android:textSize="16dp"
                 android:maxLines="1"
-                android:textColor="@color/primary"
+                android:textColor="@color/primary_acent"
                 android:textAlignment="viewEnd"/>
         </LinearLayout>
         <LinearLayout
@@ -64,9 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:maxLines="1"
-                android:text="Category post"
-                android:textSize="12dp"
-                android:textStyle="bold"/>
+                android:text="Category post" />
             <TextView
                 android:id="@+id/locationPostTextView"
                 android:layout_width="0dp"
@@ -74,9 +74,28 @@
                 android:layout_weight="1"
                 android:maxLines="1"
                 android:text="Location"
-                android:textSize="12dp"
                 android:textAlignment="viewEnd" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:layout_marginVertical="0dp"
+            android:layout_marginHorizontal="10dp">
+            <TextView
+                android:id="@+id/usernamePostTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:layout_marginTop="5dp"
+                android:text="User name"
+                android:textSize="12dp" />
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -189,6 +208,38 @@
 
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="0dp"
+            android:background="@color/primary_light"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1">
+            <ImageView
+                android:src="@drawable/ic_like"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="5dp"
+                android:alpha=".5"
+                app:tint="@color/primary_muted" />
+            <TextView
+                android:id="@+id/antiquityPostTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAlignment="textEnd"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:text="0 Like"
+                android:layout_marginHorizontal="4dp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

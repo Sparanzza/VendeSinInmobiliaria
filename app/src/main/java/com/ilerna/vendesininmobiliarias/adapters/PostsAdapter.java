@@ -19,6 +19,9 @@ import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.Utils.Utils;
 import com.ilerna.vendesininmobiliarias.activities.DetailsPostActivity;
 import com.ilerna.vendesininmobiliarias.models.Post;
+import com.ilerna.vendesininmobiliarias.models.User;
+import com.ilerna.vendesininmobiliarias.providers.PostsProvider;
+import com.ilerna.vendesininmobiliarias.providers.UsersProvider;
 
 import java.net.URL;
 import java.text.NumberFormat;
@@ -28,10 +31,12 @@ public class PostsAdapter extends FirestoreRecyclerAdapter<Post, PostsAdapter.Vi
 
     View view;
     Context context;
+    UsersProvider up;
 
     public PostsAdapter(FirestoreRecyclerOptions<Post> options, Context context) {
         super(options);
         this.context = context;
+        up = new UsersProvider();
     }
 
     @Override
@@ -65,7 +70,12 @@ public class PostsAdapter extends FirestoreRecyclerAdapter<Post, PostsAdapter.Vi
         else if (model.getImage7() != null && !model.getImage7().isEmpty())
             setMainPhotoPostImageView(model.getImage7());
 
-        view.setOnClickListener(view ->{
+        up.getUser(model.getUserUid()).addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists() && documentSnapshot.contains("username"))
+                holder.usernamePostTextView.setText("User: " + documentSnapshot.getString("username"));
+        });
+
+        view.setOnClickListener(view -> {
             DocumentSnapshot doc = getSnapshots().getSnapshot(position);
             Intent intent = new Intent(context, DetailsPostActivity.class);
             intent.putExtra("postId", doc.getId());
@@ -96,6 +106,7 @@ public class PostsAdapter extends FirestoreRecyclerAdapter<Post, PostsAdapter.Vi
         TextView sqmPostTextView;
         TextView floorPostTextView;
         TextView antiquityPostTextView;
+        TextView usernamePostTextView;
         ImageView mainPhotoPostImageView;
         View viewHolder;
 
@@ -110,6 +121,7 @@ public class PostsAdapter extends FirestoreRecyclerAdapter<Post, PostsAdapter.Vi
             sqmPostTextView = view.findViewById(R.id.sqmPostTextView);
             floorPostTextView = view.findViewById(R.id.floorPostTextView);
             antiquityPostTextView = view.findViewById(R.id.antiquityPostTextView);
+            usernamePostTextView = view.findViewById(R.id.usernamePostTextView);
             mainPhotoPostImageView = view.findViewById(R.id.mainPhotoPostImageView);
             viewHolder = view;
         }
