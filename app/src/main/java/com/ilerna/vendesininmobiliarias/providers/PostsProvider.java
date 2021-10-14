@@ -20,7 +20,7 @@ public class PostsProvider {
     }
 
     public Query getAllPosts(){
-        return postCollection.orderBy("title", Query.Direction.DESCENDING);
+        return postCollection.orderBy("timestamp", Query.Direction.DESCENDING);
     }
 
     public Query getAllPostByUser(String userUid){
