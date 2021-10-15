@@ -36,6 +36,7 @@ import com.ilerna.vendesininmobiliarias.models.Post;
 import com.ilerna.vendesininmobiliarias.models.SlideItemPost;
 import com.ilerna.vendesininmobiliarias.providers.CommentsProvider;
 import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
+import com.ilerna.vendesininmobiliarias.providers.LikesProvider;
 import com.ilerna.vendesininmobiliarias.providers.PostsProvider;
 import com.ilerna.vendesininmobiliarias.providers.UsersProvider;
 
@@ -74,6 +75,8 @@ public class DetailsPostActivity extends AppCompatActivity {
     private TextView acDetailsPostTextView;
     private TextView consumptionDetailsPostTextView;
     private TextView emissionsDetailsPostTextView;
+    private TextView timePostTextView;
+    private TextView likesPostTextView;
     private FloatingActionButton commentDetailsPostFab;
     private ImageView arrowBackPostDetail;
     private RecyclerView commentsDetailsPostRecyclerView;
@@ -82,6 +85,7 @@ public class DetailsPostActivity extends AppCompatActivity {
     UsersProvider up;
     CommentsProvider cp;
     FirebaseAuthProvider fap;
+    LikesProvider lp;
 
     CommentsAdapter commentsAdapter;
 
@@ -122,6 +126,8 @@ public class DetailsPostActivity extends AppCompatActivity {
         commentDetailsPostFab = findViewById(R.id.commentDetailsPostFab);
         arrowBackPostDetail = findViewById(R.id.arrowBackPostDetail);
         commentsDetailsPostRecyclerView = findViewById(R.id.commentsDetailsPostRecyclerView);
+        timePostTextView = findViewById(R.id.timePostTextView);
+        likesPostTextView = findViewById(R.id.likesPostTextView);
 
         arrowBackPostDetail.setOnClickListener(view -> finish());
 
@@ -139,6 +145,7 @@ public class DetailsPostActivity extends AppCompatActivity {
         up = new UsersProvider();
         cp = new CommentsProvider();
         fap = new FirebaseAuthProvider();
+        lp = new LikesProvider();
         getPostById(postId);
 
     }
@@ -223,6 +230,13 @@ public class DetailsPostActivity extends AppCompatActivity {
     }
 
     private void getPostById(String id) {
+        // number likes
+        lp.getLikeByPost(postId).addSnapshotListener((querySnapshot, exception) -> {
+            int numberLikes = querySnapshot.size();
+            if (numberLikes <= 1) likesPostTextView.setText(numberLikes + " Like");
+            else likesPostTextView.setText(numberLikes + " Likes");
+        });
+
         pp.getPostById(id).addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 // Make a copy of the slides you'll be presenting.
@@ -397,6 +411,12 @@ public class DetailsPostActivity extends AppCompatActivity {
                     dataText = documentSnapshot.getString("status");
                     if (dataText != null && !dataText.isEmpty())
                         statusDetailsPostTextView.setText(dataText);
+                }
+
+                if (documentSnapshot.contains("timestamp")) {
+                    Long data = documentSnapshot.getLong("timestamp");
+                    if (data != null )
+                        timePostTextView.setText(Utils.getTimeAgo(data));
                 }
 
                 if (documentSnapshot.contains("userUid")) {

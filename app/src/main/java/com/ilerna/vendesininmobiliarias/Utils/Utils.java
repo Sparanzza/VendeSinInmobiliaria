@@ -25,6 +25,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
@@ -146,7 +148,8 @@ public interface Utils {
     }
 
     // https://stackoverflow.com/questions/2471935/how-to-load-an-imageview-by-url-in-android
-    static @Nullable Bitmap unSafeurlToBitmap(String urlImage){
+    static @Nullable
+    Bitmap unSafeurlToBitmap(String urlImage) {
         try {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
@@ -186,6 +189,35 @@ public interface Utils {
             imageView.getDrawable().setTintList(null);
 
         }
+    }
+
+    static final int SECOND_MILLIS = 1000;
+    static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
+    static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
+    static final int DAY_MILLIS = 24 * HOUR_MILLIS;
+
+
+    static String getTimeAgo(long time) {
+        // if timestamp given in seconds, convert to millis
+        if (time < 1000000000000L) time *= 1000;
+
+        long now = System.currentTimeMillis();
+        if (time > now || time <= 0) return null;
+
+        final long diff = now - time;
+        if (diff < MINUTE_MILLIS) return "a momment";
+        else if (diff < 2 * MINUTE_MILLIS) return "one minute ago";
+        else if (diff < 50 * MINUTE_MILLIS) return diff / MINUTE_MILLIS + " minutes ago";
+        else if (diff < 90 * MINUTE_MILLIS) return "one hour ago";
+        else if (diff < 24 * HOUR_MILLIS) return diff / HOUR_MILLIS + " hours ago";
+        else if (diff < 48 * HOUR_MILLIS) return "Yesterday";
+        else return diff / DAY_MILLIS + " days ago";
+
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    static String timeFormatAMPM(long timestamp) {
+        return new SimpleDateFormat("hh:mm a").format(new Date(timestamp));
     }
 
 }
