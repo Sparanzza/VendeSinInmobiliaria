@@ -1,8 +1,9 @@
 package com.ilerna.vendesininmobiliarias.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +19,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.Utils.Utils;
 import com.ilerna.vendesininmobiliarias.activities.DetailsPostActivity;
+import com.ilerna.vendesininmobiliarias.models.Like;
 import com.ilerna.vendesininmobiliarias.models.Post;
-import com.ilerna.vendesininmobiliarias.models.User;
-import com.ilerna.vendesininmobiliarias.providers.PostsProvider;
+import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
+import com.ilerna.vendesininmobiliarias.providers.LikesProvider;
 import com.ilerna.vendesininmobiliarias.providers.UsersProvider;
 
-import java.net.URL;
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class PostsAdapter extends FirestoreRecyclerAdapter<Post, PostsAdapter.ViewHolder> {
@@ -32,15 +34,24 @@ public class PostsAdapter extends FirestoreRecyclerAdapter<Post, PostsAdapter.Vi
     View view;
     Context context;
     UsersProvider up;
+    LikesProvider lp;
+    FirebaseAuthProvider fap;
 
     public PostsAdapter(FirestoreRecyclerOptions<Post> options, Context context) {
         super(options);
         this.context = context;
         up = new UsersProvider();
+        lp = new LikesProvider();
+        fap = new FirebaseAuthProvider();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Post model) {
+
+        DocumentSnapshot doc = getSnapshots().getSnapshot(position);
+        String postId = doc.getId();
+
         holder.titlePostTextView.setText(model.getTitle());
         holder.pricePostTextView.setText(NumberFormat.getNumberInstance(Locale.US).format(Long.parseLong(model.getPrice())) + " $");
         holder.categoryPostTextView.setText(model.getCategory());
@@ -76,14 +87,47 @@ public class PostsAdapter extends FirestoreRecyclerAdapter<Post, PostsAdapter.Vi
         });
 
         view.setOnClickListener(view -> {
-            DocumentSnapshot doc = getSnapshots().getSnapshot(position);
             Intent intent = new Intent(context, DetailsPostActivity.class);
-            intent.putExtra("postId", doc.getId());
+            intent.putExtra("postId", postId);
             context.startActivity(intent);
 
         });
 
+        // number likes
+        lp.getLikeByPost(postId).addSnapshotListener((querySnapshot, exception) -> {
+            int numberLikes = querySnapshot.size();
+            if (numberLikes <= 1) holder.likeTextView.setText(numberLikes + " Like");
+            else holder.likeTextView.setText(numberLikes + " Likes");
+        });
+
+
+        // Exist Like
+        lp.getLikeByPostAndUser(postId, fap.getCurrentUid()).get().addOnSuccessListener(querySnapshot -> {
+            int numberLikes = querySnapshot.size();
+            if (numberLikes == 0) holder.likeImageView.setColorFilter(Color.GRAY);
+            else holder.likeImageView.setColorFilter(Color.parseColor("#3fa6bb"));
+        });
+
+        // Set Like
+        holder.likeImageView.setOnClickListener(view -> {
+            Like like = new Like();
+            like.setUserId(fap.getCurrentUid());
+            like.setPostId(postId);
+            like.setTimestamp(new Date().getTime());
+
+            lp.getLikeByPostAndUser(postId, fap.getCurrentUid()).get().addOnSuccessListener(querySnapshot -> {
+                int numberLikes = querySnapshot.size();
+                if (numberLikes > 0) {
+                    lp.removeLike(querySnapshot.getDocuments().get(0).getId());
+                    holder.likeImageView.setColorFilter(Color.GRAY);
+                } else {
+                    lp.createLike(like);
+                    holder.likeImageView.setColorFilter(Color.parseColor("#3fa6bb"));
+                }
+            });
+        });
     }
+
 
     public void setMainPhotoPostImageView(String url) {
         new Utils.ImageDownloadTasK(view.findViewById(R.id.mainPhotoPostImageView)).execute(url);
@@ -108,6 +152,8 @@ public class PostsAdapter extends FirestoreRecyclerAdapter<Post, PostsAdapter.Vi
         TextView antiquityPostTextView;
         TextView usernamePostTextView;
         ImageView mainPhotoPostImageView;
+        TextView likeTextView;
+        ImageView likeImageView;
         View viewHolder;
 
         public ViewHolder(View view) {
@@ -123,6 +169,8 @@ public class PostsAdapter extends FirestoreRecyclerAdapter<Post, PostsAdapter.Vi
             antiquityPostTextView = view.findViewById(R.id.antiquityPostTextView);
             usernamePostTextView = view.findViewById(R.id.usernamePostTextView);
             mainPhotoPostImageView = view.findViewById(R.id.mainPhotoPostImageView);
+            likeTextView = view.findViewById(R.id.likeTextView);
+            likeImageView = view.findViewById(R.id.likeImageView);
             viewHolder = view;
         }
     }
