@@ -436,16 +436,11 @@ public class DetailsPostActivity extends AppCompatActivity {
                                         phoneNumberDetialsPostTextView.setText(phoneNumber);
                                 }
 
-
                                 if (userSnapshot.contains("photoProfile")) {
                                     String photoProfileUrl = userSnapshot.getString("photoProfile");
                                     if (photoProfileUrl != null && !photoProfileUrl.isEmpty())
                                         new Utils.ImageDownloadTasK((ImageView) findViewById(R.id.photoProfileDetailsPostImageView)).execute(photoProfileUrl);
                                 }
-
-
-                            } else {
-
                             }
                         });
 

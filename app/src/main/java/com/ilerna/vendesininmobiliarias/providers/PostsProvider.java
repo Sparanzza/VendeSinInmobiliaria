@@ -31,4 +31,8 @@ public class PostsProvider {
         return postCollection.document(id).get();
     }
 
+    public Task<Void> deletePost(String id){
+        return postCollection.document(id).delete();
+    }
+
 }

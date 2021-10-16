@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +14,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.Query;
 import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.Utils.Utils;
 import com.ilerna.vendesininmobiliarias.activities.EditProfileActivity;
+import com.ilerna.vendesininmobiliarias.adapters.PostsAdapter;
+import com.ilerna.vendesininmobiliarias.adapters.UserPostAdapter;
+import com.ilerna.vendesininmobiliarias.models.Post;
 import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
 import com.ilerna.vendesininmobiliarias.providers.ImagesProvider;
 import com.ilerna.vendesininmobiliarias.providers.PostsProvider;
@@ -46,14 +53,17 @@ public class ProfileFragment extends Fragment {
     TextView phoneProfileTextView;
     TextView emailProfileTextView;
     TextView totalPostsProfileTextView;
+    RecyclerView postsProfileRecyclerView;
 
     ImagesProvider ip;
     UsersProvider up;
     FirebaseAuthProvider fap;
     PostsProvider pp;
 
+    UserPostAdapter userPostAdapter;
+
     public ProfileFragment() {
-        // Required empty public constructor
+        // Required empty public constructorZ
     }
 
     /**
@@ -84,6 +94,24 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        Query query = pp.getAllPostByUser(fap.getCurrentUid());
+        FirestoreRecyclerOptions<Post> options =
+                new FirestoreRecyclerOptions.Builder<Post>()
+                        .setQuery(query, Post.class).build();
+        userPostAdapter = new UserPostAdapter(options, getContext());
+        postsProfileRecyclerView.setAdapter(userPostAdapter);
+        userPostAdapter.startListening(); // Start listening from FireStore database
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        userPostAdapter.stopListening();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -94,6 +122,10 @@ public class ProfileFragment extends Fragment {
         emailProfileTextView = view.findViewById(R.id.emailProfileTextView);
         phoneProfileTextView = view.findViewById(R.id.phoneProfileTextView);
         totalPostsProfileTextView = view.findViewById(R.id.totalPostsProfileTextView);
+        postsProfileRecyclerView = view.findViewById(R.id.postsProfileRecyclerView);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        postsProfileRecyclerView.setLayoutManager(linearLayoutManager);
 
         editProfileFab.setOnClickListener(view -> goToEditProfile());
 
@@ -141,10 +173,10 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void getPosts(){
+    private void getPosts() {
         pp.getAllPostByUser(fap.getCurrentUid()).get().addOnSuccessListener(queryDocumentSnapshots -> {
-           int totalPosts = queryDocumentSnapshots.size();
-           totalPostsProfileTextView.setText(String.valueOf(totalPosts));
+            int totalPosts = queryDocumentSnapshots.size();
+            totalPostsProfileTextView.setText(String.valueOf(totalPosts));
         });
     }
 }
