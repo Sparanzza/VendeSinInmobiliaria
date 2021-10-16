@@ -1,7 +1,9 @@
 package com.ilerna.vendesininmobiliarias.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -53,6 +55,10 @@ public class UserPostAdapter extends FirestoreRecyclerAdapter<Post, UserPostAdap
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Post model) {
 
+        if (model.getUserUid().equals(fap.getCurrentUid()))
+            holder.cancelCardUserPostButton.setVisibility(View.VISIBLE);
+        else holder.cancelCardUserPostButton.setVisibility(View.GONE);
+
         holder.titleCardUserPostTextView.setText(model.getTitle());
         holder.timeCardUserPostTextView.setText(Utils.getTimeAgo(model.getTimestamp()));
 
@@ -83,13 +89,22 @@ public class UserPostAdapter extends FirestoreRecyclerAdapter<Post, UserPostAdap
         });
 
         holder.cancelCardUserPostButton.setOnClickListener(view -> {
-            pp.deletePost(getSnapshots().getSnapshot(position).getId()).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    Toast.makeText(context, "Delete post successfully", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, "Error on delete post", Toast.LENGTH_SHORT).show();
-                }
-            });
+
+            new AlertDialog.Builder(context)
+                    .setIcon(android.R.drawable.ic_delete)
+                    .setTitle("Delete Post")
+                    .setMessage("Are you sure to delete this post?")
+                    .setPositiveButton("Yes", (dialogInterface, i) -> {
+                        pp.deletePost(getSnapshots().getSnapshot(position).getId()).addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(context, "Delete post successfully", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context, "Error on delete post", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
         });
     }
 

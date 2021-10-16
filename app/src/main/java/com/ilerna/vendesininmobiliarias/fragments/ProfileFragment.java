@@ -48,7 +48,7 @@ public class ProfileFragment extends Fragment {
     FloatingActionButton editProfileFab;
     View view;
 
-    ImageView photoProfileImageView;
+    TextView existPostProfileTextView;
     TextView usernameProfileTextView;
     TextView phoneProfileTextView;
     TextView emailProfileTextView;
@@ -123,6 +123,7 @@ public class ProfileFragment extends Fragment {
         phoneProfileTextView = view.findViewById(R.id.phoneProfileTextView);
         totalPostsProfileTextView = view.findViewById(R.id.totalPostsProfileTextView);
         postsProfileRecyclerView = view.findViewById(R.id.postsProfileRecyclerView);
+        existPostProfileTextView = view.findViewById(R.id.existPostProfileTextView);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         postsProfileRecyclerView.setLayoutManager(linearLayoutManager);
@@ -145,6 +146,14 @@ public class ProfileFragment extends Fragment {
     }
 
     private void getUserProfile() {
+        pp.getAllPostByUser(fap.getCurrentUid()).addSnapshotListener((querySnapshot, exception) -> {
+            if (querySnapshot.size() > 0) {
+                existPostProfileTextView.setText(querySnapshot.size() + " Posts");
+            } else {
+                existPostProfileTextView.setText("No Post");
+            }
+        });
+
         up.getUser(fap.getCurrentUid()).addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 if (documentSnapshot.contains("username")) {

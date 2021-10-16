@@ -1,14 +1,20 @@
 package com.ilerna.vendesininmobiliarias.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.Query;
 import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.Utils.Utils;
+import com.ilerna.vendesininmobiliarias.adapters.UserPostAdapter;
+import com.ilerna.vendesininmobiliarias.models.Post;
 import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
 import com.ilerna.vendesininmobiliarias.providers.ImagesProvider;
 import com.ilerna.vendesininmobiliarias.providers.PostsProvider;
@@ -16,7 +22,7 @@ import com.ilerna.vendesininmobiliarias.providers.UsersProvider;
 
 public class UserProfileActivity extends AppCompatActivity {
 
-    ImageView photoProfileImageView;
+    TextView existPostUserProfileTextView;
     TextView usernameProfileTextView;
     TextView phoneProfileTextView;
     TextView emailProfileTextView;
@@ -29,6 +35,8 @@ public class UserProfileActivity extends AppCompatActivity {
     PostsProvider pp;
 
     String userProfileId;
+    RecyclerView postsProfileRecyclerView;
+    UserPostAdapter userPostAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +48,15 @@ public class UserProfileActivity extends AppCompatActivity {
         phoneProfileTextView = findViewById(R.id.phoneProfileTextView);
         totalPostsProfileTextView = findViewById(R.id.totalPostsProfileTextView);
         arrowBackUserProfileDetail = findViewById(R.id.arrowBackUserProfileDetail);
+        existPostUserProfileTextView = findViewById(R.id.existPostUserProfileTextView);
+        postsProfileRecyclerView = findViewById(R.id.postsProfileRecyclerView);
 
         arrowBackUserProfileDetail.setOnClickListener(ev -> finish());
 
         userProfileId = getIntent().getStringExtra("userId");
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(UserProfileActivity.this);
+        postsProfileRecyclerView.setLayoutManager(linearLayoutManager);
 
         ip = new ImagesProvider();
         up = new UsersProvider();
@@ -54,7 +67,33 @@ public class UserProfileActivity extends AppCompatActivity {
         getPosts();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Query query = pp.getAllPostByUser(userProfileId);
+        FirestoreRecyclerOptions<Post> options =
+                new FirestoreRecyclerOptions.Builder<Post>()
+                        .setQuery(query, Post.class).build();
+        userPostAdapter = new UserPostAdapter(options, UserProfileActivity.this);
+        postsProfileRecyclerView.setAdapter(userPostAdapter);
+        userPostAdapter.startListening(); // Start listening from FireStore database
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        userPostAdapter.stopListening();
+    }
+
     private void getUserProfile() {
+        pp.getAllPostByUser(userProfileId).addSnapshotListener((querySnapshot, exception) -> {
+            if (querySnapshot.size() > 0) {
+                existPostUserProfileTextView.setText(querySnapshot.size() + " Posts");
+            } else {
+                existPostUserProfileTextView.setText("No Post");
+            }
+        });
+
         up.getUser(userProfileId).addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 if (documentSnapshot.contains("username")) {

@@ -205,7 +205,7 @@ public interface Utils {
         if (time > now || time <= 0) return null;
 
         final long diff = now - time;
-        if (diff < MINUTE_MILLIS) return "a momment";
+        if (diff < MINUTE_MILLIS) return "a moment ago";
         else if (diff < 2 * MINUTE_MILLIS) return "one minute ago";
         else if (diff < 50 * MINUTE_MILLIS) return diff / MINUTE_MILLIS + " minutes ago";
         else if (diff < 90 * MINUTE_MILLIS) return "one hour ago";
