@@ -2,8 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/itemSearch"
+        android:icon="@drawable/ic_search"
+        android:title="Search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:iconTint="@color/primary"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:title="Search" />
+    <item
+        app:iconTint="@color/primary"
         android:id="@+id/itemLogout"
         android:icon="@drawable/ic_round_person_24"
         android:title="Logout"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 </menu>

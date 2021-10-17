@@ -31,8 +31,7 @@
             android:background="@color/primary"
             app:itemIconTint="@color/white"
             app:itemTextColor="@color/white"
-            app:menu="@menu/bottom_navigation_menu"
-            />
+            app:menu="@menu/bottom_navigation_menu" />
 
     </FrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

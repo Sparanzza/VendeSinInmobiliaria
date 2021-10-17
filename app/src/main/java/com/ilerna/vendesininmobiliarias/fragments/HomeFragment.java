@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +16,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.Query;
 import com.ilerna.vendesininmobiliarias.R;
+import com.ilerna.vendesininmobiliarias.Utils.CategoriesEnum;
 import com.ilerna.vendesininmobiliarias.activities.AddPostActivity;
 import com.ilerna.vendesininmobiliarias.adapters.PostsAdapter;
 import com.ilerna.vendesininmobiliarias.models.Post;
@@ -68,7 +70,12 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Query query = pp.getAllPosts();
+        Query query;
+        if (getArguments().getString("param1").equals("ALL") || getArguments().getString("param1").isEmpty()) {
+            if (getArguments().getString("param2").isEmpty()) query = pp.getAllPosts();
+            else query = pp.getAllPostsByTitle(getArguments().getString("param2"));
+        } else query = pp.getAllPostsByCategory(getArguments().getString("param1"));
+
         FirestoreRecyclerOptions<Post> options =
                 new FirestoreRecyclerOptions.Builder<Post>()
                         .setQuery(query, Post.class).build();
@@ -100,8 +107,16 @@ public class HomeFragment extends Fragment {
         fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(view -> goToPost());
         postHomeRecyclerView = view.findViewById(R.id.postHomeRecyclerView);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        postHomeRecyclerView.setLayoutManager(linearLayoutManager);
+        if (
+                (getArguments().getString("param1").equals("ALL") || getArguments().getString("param1").isEmpty())
+                && getArguments().getString("param2").isEmpty()
+        ) {
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+            postHomeRecyclerView.setLayoutManager(linearLayoutManager);
+        } else {
+            postHomeRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        }
+
         return view;
     }
 

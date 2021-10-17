@@ -1,14 +1,891 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.FiltersFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/filters_title_fragment" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="5dp"
+                android:text="CATEGORIES"
+                android:textAlignment="center"
+                android:textColor="@color/primary_acent"
+                android:textStyle="bold" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="95dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        app:cardBackgroundColor="@color/primary_acent"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_margin="2dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imageViewAll"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/ic_filter_alt_off"
+                            android:tint="@color/white" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:text="All"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="95dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        app:cardBackgroundColor="@color/primary_acent"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_margin="2dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imageViewFlats"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/ic_flat"
+                            android:tint="@color/white" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:text="Flats"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="95dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        app:cardBackgroundColor="@color/primary_acent"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_margin="2dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imageViewHomes"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/ic_home"
+                            android:tint="@color/white" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:text="Homes"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="95dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        app:cardBackgroundColor="@color/primary_acent"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_margin="2dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imageViewFields"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/ic_field"
+                            android:tint="@color/white" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:text="Fields"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="95dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        app:cardBackgroundColor="@color/primary_acent"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_margin="2dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imageViewOffices"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/ic_office"
+                            android:tint="@color/white" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:text="Offices"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="95dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        app:cardBackgroundColor="@color/primary_acent"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_margin="2dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imageViewStorages"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/ic_storageroom"
+                            android:tint="@color/white" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:text="Storages"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="95dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        app:cardBackgroundColor="@color/primary_acent"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_margin="2dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imageViewGarages"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/ic_garage"
+                            android:tint="@color/white" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:text="Garages"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="95dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        app:cardBackgroundColor="@color/primary_acent"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_margin="2dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imageViewFactories"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/ic_factory"
+                            android:tint="@color/white" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:text="Factories"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="95dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        app:cardBackgroundColor="@color/primary_acent"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_margin="2dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imageViewCommercials"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/ic_shop"
+                            android:tint="@color/white" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:text="Commercial"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="16dp" />
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+            </LinearLayout>
+<!--
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
+                android:text="FEATURES"
+                android:textAlignment="center"
+                android:textColor="@color/primary_acent_light"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        app:tint="@color/primary_acent_light"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_bed"></ImageView>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        app:boxBackgroundColor="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:theme="@style/TextInputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/bedroomEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:hint="Bedroom"
+                            android:inputType="numberSigned"
+                            android:outlineProvider="none"></com.google.android.material.textfield.TextInputEditText>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        app:tint="@color/primary_acent_light"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_bathroom"></ImageView>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        app:boxBackgroundColor="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:theme="@style/TextInputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/bathroomEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:hint="Bathroom"
+                            android:inputType="numberSigned"
+                            android:outlineProvider="none"></com.google.android.material.textfield.TextInputEditText>
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        app:tint="@color/primary_acent_light"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_blueprint"></ImageView>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        app:boxBackgroundColor="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:theme="@style/TextInputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/sqmEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:hint="Square meters"
+                            android:inputType="numberSigned"
+                            android:outlineProvider="none"></com.google.android.material.textfield.TextInputEditText>
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        app:tint="@color/primary_acent_light"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_building"></ImageView>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        app:boxBackgroundColor="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:theme="@style/TextInputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/floorEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:hint="Floor"
+                            android:inputType="numberSigned"
+                            android:outlineProvider="none"></com.google.android.material.textfield.TextInputEditText>
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        app:tint="@color/primary_acent_light"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_clock"></ImageView>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        app:boxBackgroundColor="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:theme="@style/TextInputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/antiquityEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:hint="Antiquity (years)"
+                            android:inputType="numberSigned"
+                            android:outlineProvider="none"></com.google.android.material.textfield.TextInputEditText>
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        app:tint="@color/primary_acent_light"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_parking"></ImageView>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        app:boxBackgroundColor="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:background="@android:color/transparent"
+                        android:theme="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/parkingEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:hint="Parking"
+                            android:inputType="none"
+                            android:textAlignment="gravity"
+                            android:theme="@style/TextInputLayout" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        app:tint="@color/primary_acent_light"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_tools"></ImageView>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        app:boxBackgroundColor="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:background="@android:color/transparent"
+                        android:theme="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/statusEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:hint="Status"
+                            android:inputType="none"
+                            android:textAlignment="gravity"
+                            android:theme="@style/TextInputLayout" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        app:tint="@color/primary_acent_light"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_elevator"></ImageView>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        app:boxBackgroundColor="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:background="@android:color/transparent"
+                        android:theme="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/elevatorEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:hint="Elevator"
+                            android:inputType="none"
+                            android:textAlignment="gravity"
+                            android:theme="@style/TextInputLayout" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        app:tint="@color/primary_acent_light"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_heating"></ImageView>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        app:boxBackgroundColor="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:background="@android:color/transparent"
+                        android:theme="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/heatingEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:hint="Heating"
+                            android:inputType="none"
+                            android:textAlignment="gravity"
+                            android:theme="@style/TextInputLayout" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        app:tint="@color/primary_acent_light"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_ac"></ImageView>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        app:boxBackgroundColor="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:background="@android:color/transparent"
+                        android:theme="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/acEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:hint="Air condition"
+                            android:inputType="none"
+                            android:textAlignment="gravity"
+                            android:theme="@style/TextInputLayout" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        app:tint="@color/primary_acent_light"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_orientation"></ImageView>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        app:boxBackgroundColor="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:background="@android:color/transparent"
+                        android:theme="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/orientationEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:hint="Orientation"
+                            android:inputType="none"
+                            android:textAlignment="gravity"
+                            android:theme="@style/TextInputLayout" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        app:tint="@color/primary_acent_light"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_sofa"></ImageView>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        app:boxBackgroundColor="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:background="@android:color/transparent"
+                        android:theme="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/furnishedEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:hint="Furnished"
+                            android:inputType="none"
+                            android:textAlignment="gravity"
+                            android:theme="@style/TextInputLayout" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        app:tint="@color/primary_acent_light"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_leaf"></ImageView>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        app:boxBackgroundColor="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:background="@android:color/transparent"
+                        android:theme="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/energyConsumptionEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:hint="Energy Consumption"
+                            android:inputType="none"
+                            android:textAlignment="gravity"
+                            android:theme="@style/TextInputLayout" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        app:tint="@color/primary_acent_light"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_rain"></ImageView>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        app:boxBackgroundColor="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:background="@android:color/transparent"
+                        android:theme="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/emissionsEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:hint="Emissions"
+                            android:inputType="none"
+                            android:textAlignment="gravity"
+                            android:theme="@style/TextInputLayout" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+            -->
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

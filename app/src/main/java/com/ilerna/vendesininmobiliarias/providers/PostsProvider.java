@@ -19,19 +19,28 @@ public class PostsProvider {
         return postCollection.document().set(post);
     }
 
-    public Query getAllPosts(){
+    public Query getAllPosts() {
         return postCollection.orderBy("timestamp", Query.Direction.DESCENDING);
     }
 
-    public Query getAllPostByUser(String userUid){
+    public Query getAllPostByUser(String userUid) {
         return postCollection.whereEqualTo("userUid", userUid);
     }
 
-    public Task<DocumentSnapshot> getPostById(String id){
+    public Query getAllPostsByCategory(String category) {
+        return postCollection.whereEqualTo("category", category).orderBy("timestamp", Query.Direction.DESCENDING);
+    }
+
+
+    public Query getAllPostsByTitle(String title) {
+        return postCollection.whereGreaterThanOrEqualTo("title", title).whereLessThanOrEqualTo("title", title + '\uf8ff').orderBy("title", Query.Direction.DESCENDING);
+    }
+
+    public Task<DocumentSnapshot> getPostById(String id) {
         return postCollection.document(id).get();
     }
 
-    public Task<Void> deletePost(String id){
+    public Task<Void> deletePost(String id) {
         return postCollection.document(id).delete();
     }
 

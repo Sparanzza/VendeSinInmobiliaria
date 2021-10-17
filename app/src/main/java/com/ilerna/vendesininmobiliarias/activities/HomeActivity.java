@@ -5,28 +5,38 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.widget.SearchView;
 
+
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.Query;
 import com.ilerna.vendesininmobiliarias.R;
+import com.ilerna.vendesininmobiliarias.Utils.CategoriesEnum;
+import com.ilerna.vendesininmobiliarias.adapters.PostsAdapter;
 import com.ilerna.vendesininmobiliarias.fragments.ChatsFragment;
 import com.ilerna.vendesininmobiliarias.fragments.FiltersFragment;
 import com.ilerna.vendesininmobiliarias.fragments.HomeFragment;
 import com.ilerna.vendesininmobiliarias.fragments.ProfileFragment;
+import com.ilerna.vendesininmobiliarias.models.Post;
 import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
+import com.ilerna.vendesininmobiliarias.providers.PostsProvider;
 
 public class HomeActivity extends AppCompatActivity {
-
 
     BottomNavigationView bottomNavigation;
     Toolbar toolbar;
     FirebaseAuthProvider fap;
+    PostsAdapter postsAdapter;
+    PostsProvider pp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,19 +50,61 @@ public class HomeActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         fap = new FirebaseAuthProvider();
+        pp = new PostsProvider();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+
+        MenuItem.OnActionExpandListener onActionExpandListener = new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                Toast.makeText(HomeActivity.this, "Expand", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                Toast.makeText(HomeActivity.this, "Collapse", Toast.LENGTH_SHORT).show();
+                openFragment(HomeFragment.newInstance("ALL", ""));
+                return true;
+            }
+        };
+
+        menu.findItem(R.id.itemSearch).setOnActionExpandListener(onActionExpandListener);
+        SearchView searchView = (SearchView) menu.findItem(R.id.itemSearch).getActionView();
+        searchView.setQueryHint("Search post here ...");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //use this action
+                // Toast.makeText(HomeActivity.this, query, Toast.LENGTH_SHORT).show();
+                openFragment(HomeFragment.newInstance("ALL", query));
+
+                searchView.clearFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.itemLogout) logout();
+        if (item.getItemId() == R.id.itemLogout) logout();
+        // if (item.getItemId() == R.id.itemSearch) search();
         return super.onOptionsItemSelected(item);
     }
+
+    private void search() {
+    }
+
 
     private void logout() {
         fap.logout();
@@ -66,7 +118,7 @@ public class HomeActivity extends AppCompatActivity {
             item -> {
                 switch (item.getItemId()) {
                     case R.id.itemHome:
-                        openFragment(HomeFragment.newInstance("", ""));
+                        openFragment(HomeFragment.newInstance("ALL", ""));
                         return true;
                     case R.id.itemFilters:
                         openFragment(FiltersFragment.newInstance("", ""));
