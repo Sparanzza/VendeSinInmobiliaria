@@ -32,19 +32,24 @@ import com.ilerna.vendesininmobiliarias.adapters.CommentsAdapter;
 import com.ilerna.vendesininmobiliarias.adapters.PostItemAdapter;
 import com.ilerna.vendesininmobiliarias.adapters.PostsAdapter;
 import com.ilerna.vendesininmobiliarias.models.Comment;
+import com.ilerna.vendesininmobiliarias.models.FCMBody;
 import com.ilerna.vendesininmobiliarias.models.Post;
 import com.ilerna.vendesininmobiliarias.models.SlideItemPost;
 import com.ilerna.vendesininmobiliarias.providers.CommentsProvider;
+import com.ilerna.vendesininmobiliarias.providers.FCMProvider;
 import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
 import com.ilerna.vendesininmobiliarias.providers.LikesProvider;
 import com.ilerna.vendesininmobiliarias.providers.PostsProvider;
+import com.ilerna.vendesininmobiliarias.providers.TokensProvider;
 import com.ilerna.vendesininmobiliarias.providers.UsersProvider;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class DetailsPostActivity extends AppCompatActivity {
 
@@ -86,6 +91,8 @@ public class DetailsPostActivity extends AppCompatActivity {
     CommentsProvider cp;
     FirebaseAuthProvider fap;
     LikesProvider lp;
+    FCMProvider FCMp;
+    TokensProvider tp;
 
     CommentsAdapter commentsAdapter;
 
@@ -146,6 +153,8 @@ public class DetailsPostActivity extends AppCompatActivity {
         cp = new CommentsProvider();
         fap = new FirebaseAuthProvider();
         lp = new LikesProvider();
+        FCMp = new FCMProvider();
+        tp = new TokensProvider();
         getPostById(postId);
 
     }
@@ -206,8 +215,17 @@ public class DetailsPostActivity extends AppCompatActivity {
             comment.setPostId(postId);
             comment.setUserId(fap.getCurrentUid());
             comment.setTimestamp(new Date().getTime());
+
+            if (userUid == null) return;
             cp.createComment(comment).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
+                    tp.getToken(userUid).addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists() && documentSnapshot.contains("token")) {
+                            String token = documentSnapshot.getString("token");
+
+                            FCMp.createFCMComment("New comment by " + fap.getCurrentUser().getEmail(), commentText, token);
+                        }
+                    });
                     Toast.makeText(this, "Created comment successfully!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "Error creating comment", Toast.LENGTH_SHORT).show();
@@ -415,7 +433,7 @@ public class DetailsPostActivity extends AppCompatActivity {
 
                 if (documentSnapshot.contains("timestamp")) {
                     Long data = documentSnapshot.getLong("timestamp");
-                    if (data != null )
+                    if (data != null)
                         timePostTextView.setText(Utils.getTimeAgo(data));
                 }
 

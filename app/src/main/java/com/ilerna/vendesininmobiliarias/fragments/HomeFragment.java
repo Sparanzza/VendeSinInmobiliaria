@@ -19,6 +19,7 @@ import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.Utils.CategoriesEnum;
 import com.ilerna.vendesininmobiliarias.activities.AddPostActivity;
 import com.ilerna.vendesininmobiliarias.adapters.PostsAdapter;
+import com.ilerna.vendesininmobiliarias.api.FCMApi;
 import com.ilerna.vendesininmobiliarias.models.Post;
 import com.ilerna.vendesininmobiliarias.providers.PostsProvider;
 

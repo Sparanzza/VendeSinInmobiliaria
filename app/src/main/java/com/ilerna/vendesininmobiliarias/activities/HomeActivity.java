@@ -29,6 +29,7 @@ import com.ilerna.vendesininmobiliarias.fragments.ProfileFragment;
 import com.ilerna.vendesininmobiliarias.models.Post;
 import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
 import com.ilerna.vendesininmobiliarias.providers.PostsProvider;
+import com.ilerna.vendesininmobiliarias.providers.TokensProvider;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -37,6 +38,7 @@ public class HomeActivity extends AppCompatActivity {
     FirebaseAuthProvider fap;
     PostsAdapter postsAdapter;
     PostsProvider pp;
+    TokensProvider tp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,9 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         fap = new FirebaseAuthProvider();
         pp = new PostsProvider();
+        tp = new TokensProvider();
+
+        createToken();
     }
 
     @Override
@@ -138,5 +143,9 @@ public class HomeActivity extends AppCompatActivity {
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    private void createToken() {
+        tp.createToken(fap.getCurrentUid());
     }
 }
