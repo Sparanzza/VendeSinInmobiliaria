@@ -3,12 +3,22 @@ package com.ilerna.vendesininmobiliarias.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.Query;
 import com.ilerna.vendesininmobiliarias.R;
+import com.ilerna.vendesininmobiliarias.adapters.ChatsAdapter;
+import com.ilerna.vendesininmobiliarias.adapters.PostsAdapter;
+import com.ilerna.vendesininmobiliarias.models.Chat;
+import com.ilerna.vendesininmobiliarias.models.Post;
+import com.ilerna.vendesininmobiliarias.providers.ChatsProvider;
+import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +35,12 @@ public class ChatsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    ChatsAdapter chatsAdapter;
+    RecyclerView chatsRecyclerView;
+    View view;
+    ChatsProvider cp;
+    FirebaseAuthProvider fap;
 
     public ChatsFragment() {
         // Required empty public constructor
@@ -49,6 +65,19 @@ public class ChatsFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        Query query = cp.getAllUsersChat(fap.getCurrentUid());
+
+        FirestoreRecyclerOptions<Chat> options =
+                new FirestoreRecyclerOptions.Builder<Chat>()
+                        .setQuery(query, Chat.class).build();
+        chatsAdapter = new ChatsAdapter(options, getContext());
+        chatsRecyclerView.setAdapter(chatsAdapter);
+        chatsAdapter.startListening(); // Start listening from FireStore database
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -58,9 +87,22 @@ public class ChatsFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        chatsAdapter.stopListening();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chats, container, false);
+        view = inflater.inflate(R.layout.fragment_chats, container, false);
+        cp = new ChatsProvider();
+        fap = new FirebaseAuthProvider();
+        chatsRecyclerView = view.findViewById(R.id.chatsRecyclerView);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        chatsRecyclerView.setLayoutManager(linearLayoutManager);
+        return view;
     }
 }

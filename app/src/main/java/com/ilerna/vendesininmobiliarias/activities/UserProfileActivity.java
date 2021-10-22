@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.Query;
 import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.Utils.Utils;
@@ -19,6 +22,8 @@ import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
 import com.ilerna.vendesininmobiliarias.providers.ImagesProvider;
 import com.ilerna.vendesininmobiliarias.providers.PostsProvider;
 import com.ilerna.vendesininmobiliarias.providers.UsersProvider;
+
+import java.util.Objects;
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -37,6 +42,7 @@ public class UserProfileActivity extends AppCompatActivity {
     String userProfileId;
     RecyclerView postsProfileRecyclerView;
     UserPostAdapter userPostAdapter;
+    FloatingActionButton chatFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +56,21 @@ public class UserProfileActivity extends AppCompatActivity {
         arrowBackUserProfileDetail = findViewById(R.id.arrowBackUserProfileDetail);
         existPostUserProfileTextView = findViewById(R.id.existPostUserProfileTextView);
         postsProfileRecyclerView = findViewById(R.id.postsProfileRecyclerView);
+        chatFab = findViewById(R.id.chatFab);
 
         arrowBackUserProfileDetail.setOnClickListener(ev -> finish());
 
         userProfileId = getIntent().getStringExtra("userId");
+
+        chatFab.setOnClickListener(view -> {
+            Intent intent = new Intent(this, ChatActivity.class);
+            intent.putExtra("userHome", fap.getCurrentUid());
+            intent.putExtra("userAway", userProfileId);
+            startActivity(intent);
+        });
+
+
+
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(UserProfileActivity.this);
         postsProfileRecyclerView.setLayoutManager(linearLayoutManager);
@@ -63,6 +80,7 @@ public class UserProfileActivity extends AppCompatActivity {
         fap = new FirebaseAuthProvider();
         pp = new PostsProvider();
 
+        if (Objects.equals(fap.getCurrentUid(), userProfileId)) chatFab.setVisibility(View.GONE);
         getUserProfile();
         getPosts();
     }

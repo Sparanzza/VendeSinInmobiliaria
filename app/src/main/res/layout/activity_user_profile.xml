@@ -152,6 +152,18 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/chatFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_mark_chat"
+        app:maxImageSize="32dp"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/secondary"
+        app:tint="@color/white"
+        app:borderWidth="0dp"
+        android:layout_gravity="bottom|right"/>
+
     <ImageView
         android:id="@+id/arrowBackUserProfileDetail"
         android:layout_width="32dp"
