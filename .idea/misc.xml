@@ -22,14 +22,15 @@
         <entry key="app/src/main/res/layout/cardview_chats.xml" value="0.4216485507246377" />
         <entry key="app/src/main/res/layout/cardview_post.xml" value="0.5" />
         <entry key="app/src/main/res/layout/cardview_user_post.xml" value="0.5723958333333333" />
+        <entry key="app/src/main/res/layout/chat_toolbar.xml" value="0.6260416666666667" />
         <entry key="app/src/main/res/layout/details_post_slider.xml" value="0.67" />
         <entry key="app/src/main/res/layout/dropdown_item.xml" value="0.365702479338843" />
-        <entry key="app/src/main/res/layout/fragment_chats.xml" value="0.679479932165065" />
+        <entry key="app/src/main/res/layout/fragment_chats.xml" value="0.6084583901773534" />
         <entry key="app/src/main/res/layout/fragment_filters.xml" value="0.6466165413533834" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.33" />
         <entry key="app/src/main/res/layout/loading_dialog.xml" value="0.67" />
-        <entry key="app/src/main/res/layout/toolbar.xml" value="0.46693840579710144" />
+        <entry key="app/src/main/res/layout/toolbar.xml" value="0.20634920634920634" />
         <entry key="app/src/main/res/menu/boolean_menu.xml" value="0.921875" />
         <entry key="app/src/main/res/menu/bottom_navigation_menu.xml" value="0.921875" />
         <entry key="app/src/main/res/menu/toolbar_menu.xml" value="0.39322033898305087" />

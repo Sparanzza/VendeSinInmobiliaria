@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        app:title="VendeSí!"
+        app:navigationIcon="@drawable/ic_vendesi_icon_navigation"
         app:subtitle="Vende Sin Inmobiliaria!"
-        app:titleTextColor="@color/primary"
+        app:title="VendeSí!"
         app:subtitleTextColor="@color/primary_light"
-        app:navigationIcon="@drawable/ic_vendesi_icon_navigation">
-    </androidx.appcompat.widget.Toolbar>
+        app:titleTextColor="@color/primary" />
 
 </com.google.android.material.appbar.AppBarLayout>
