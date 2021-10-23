@@ -1,6 +1,7 @@
 package com.ilerna.vendesininmobiliarias.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.Utils.Utils;
+import com.ilerna.vendesininmobiliarias.activities.ChatActivity;
 import com.ilerna.vendesininmobiliarias.models.Chat;
 import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
 import com.ilerna.vendesininmobiliarias.providers.UsersProvider;
@@ -39,6 +41,14 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
         if (fap.getCurrentUid().equals(model.getUserHome())) getUser(holder, model.getUserAway());
         else getUser(holder, model.getUserHome());
         // holder.lastMsgCardViewChatsTextView.setText(model.getChat());
+
+        holder.viewHolder.setOnClickListener(view -> {
+            Intent intent = new Intent(context, ChatActivity.class);
+            intent.putExtra("userHome", model.getUserHome());
+            intent.putExtra("userAway", model.getUserAway());
+            intent.putExtra("chatId", chatId);
+            context.startActivity(intent);
+        });
     }
 
     public void getUser(ViewHolder holder, String userUid) {
