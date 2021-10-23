@@ -8,11 +8,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.models.Chat;
 import com.ilerna.vendesininmobiliarias.providers.ChatsProvider;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ChatActivity extends AppCompatActivity {
@@ -34,7 +36,14 @@ public class ChatActivity extends AppCompatActivity {
 
         cp = new ChatsProvider();
 
-        createChat();
+        existChat();
+    }
+
+    private void existChat(){
+        cp.getChatByBothUsers(userHome, userAway).get().addOnSuccessListener(querySnapshot -> {
+           if(querySnapshot.size() == 0) createChat();
+           else Toast.makeText(this, "Chat Already exists", Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void showToolbar(int chat_toolbar) {
@@ -57,7 +66,11 @@ public class ChatActivity extends AppCompatActivity {
         chat.setUserAway(userAway);
         chat.setTyping(false);
         chat.setTimestamp(new Date().getTime());
-
+        chat.setId(userHome + userAway);
+        ArrayList<String> ids = new ArrayList<>();
+        ids.add(userHome);
+        ids.add(userAway);
+        chat.setIds(ids);
         cp.createChat(chat);
 
     }

@@ -16,6 +16,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.Utils.Utils;
 import com.ilerna.vendesininmobiliarias.models.Chat;
+import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
 import com.ilerna.vendesininmobiliarias.providers.UsersProvider;
 
 public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.ViewHolder> {
@@ -23,6 +24,7 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
     View view;
     Context context;
     UsersProvider up;
+    FirebaseAuthProvider fap;
 
     public ChatsAdapter(FirestoreRecyclerOptions<Chat> options, Context context) {
         super(options);
@@ -34,7 +36,8 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
         DocumentSnapshot documentSnapshot = getSnapshots().getSnapshot(position);
         String chatId = documentSnapshot.getId();
 
-        getUser(holder, chatId);
+        if (fap.getCurrentUid().equals(model.getUserHome())) getUser(holder, model.getUserAway());
+        else getUser(holder, model.getUserHome());
         // holder.lastMsgCardViewChatsTextView.setText(model.getChat());
     }
 
@@ -73,6 +76,7 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
             photoCardViewChatsImageView = view.findViewById(R.id.photoCardViewChatsImageView);
             viewHolder = view;
             up = new UsersProvider();
+            fap = new FirebaseAuthProvider();
         }
     }
 
