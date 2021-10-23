@@ -1,5 +1,6 @@
 package com.ilerna.vendesininmobiliarias.providers;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -15,8 +16,8 @@ public class ChatsProvider {
         chatsCollection = FirebaseFirestore.getInstance().collection("Chats");
     }
 
-    public void createChat(Chat chat) {
-        chatsCollection.document(chat.getUserHome() + chat.getUserAway()).set(chat);
+    public Task<Void> createChat(Chat chat) {
+        return chatsCollection.document(chat.getUserHome() + chat.getUserAway()).set(chat);
 
     }
 

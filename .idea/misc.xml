@@ -20,6 +20,7 @@
         <entry key="app/src/main/res/layout/activity_user_profile.xml" value="0.45" />
         <entry key="app/src/main/res/layout/card_comment.xml" value="0.6906702898550725" />
         <entry key="app/src/main/res/layout/cardview_chats.xml" value="0.4216485507246377" />
+        <entry key="app/src/main/res/layout/cardview_message.xml" value="0.5366847826086957" />
         <entry key="app/src/main/res/layout/cardview_post.xml" value="0.5" />
         <entry key="app/src/main/res/layout/cardview_user_post.xml" value="0.5723958333333333" />
         <entry key="app/src/main/res/layout/chat_toolbar.xml" value="0.6260416666666667" />

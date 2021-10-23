@@ -6,18 +6,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.ilerna.vendesininmobiliarias.R;
+import com.ilerna.vendesininmobiliarias.Utils.Utils;
 import com.ilerna.vendesininmobiliarias.models.Chat;
 import com.ilerna.vendesininmobiliarias.models.Message;
 import com.ilerna.vendesininmobiliarias.providers.ChatsProvider;
 import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
 import com.ilerna.vendesininmobiliarias.providers.MessagesProvider;
+import com.ilerna.vendesininmobiliarias.providers.UsersProvider;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,17 +35,27 @@ public class ChatActivity extends AppCompatActivity {
     ChatsProvider cp;
     MessagesProvider mp;
     FirebaseAuthProvider fap;
+    UsersProvider up;
     View actionBarView;
 
     EditText messageEditText;
     ImageView sendMessageImageView;
 
+    TextView textViewUsernameChat;
+    TextView timeChatTextView;
+    ImageView photoProfileChatImageView;
+    ImageView backChatImageView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_chat);
-        showToolbar(R.layout.chat_toolbar);
+
+        cp = new ChatsProvider();
+        mp = new MessagesProvider();
+        up = new UsersProvider();
+        fap = new FirebaseAuthProvider();
 
         messageEditText = findViewById(R.id.messageEditText);
         sendMessageImageView = findViewById(R.id.sendMessageImageView);
@@ -49,10 +63,7 @@ public class ChatActivity extends AppCompatActivity {
         userHome = getIntent().getStringExtra("userHome");
         userAway = getIntent().getStringExtra("userAway");
         chatId = getIntent().getStringExtra("chatId");
-
-        cp = new ChatsProvider();
-        mp = new MessagesProvider();
-        fap = new FirebaseAuthProvider();
+        showToolbar(R.layout.chat_toolbar);
 
         sendMessageImageView.setOnClickListener(view -> {
             sendMessage();
@@ -89,7 +100,8 @@ public class ChatActivity extends AppCompatActivity {
     private void existChat() {
         cp.getChatByBothUsers(userHome, userAway).get().addOnSuccessListener(querySnapshot -> {
             if (querySnapshot.size() == 0) createChat();
-            else Toast.makeText(this, "Chat Already exists", Toast.LENGTH_SHORT).show();
+            else chatId = querySnapshot.getDocuments().get(0).getId();
+
         });
     }
 
@@ -105,6 +117,31 @@ public class ChatActivity extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         actionBarView = inflater.inflate(chat_toolbar, null);
         actionBar.setCustomView(actionBarView);
+
+
+        textViewUsernameChat = actionBarView.findViewById(R.id.textViewUsernameChat);
+        timeChatTextView = actionBarView.findViewById(R.id.timeChatTextView);
+        photoProfileChatImageView = actionBarView.findViewById(R.id.photoProfileChatImageView);
+        backChatImageView = actionBarView.findViewById(R.id.backChatImageView);
+
+        backChatImageView.setOnClickListener(view -> finish());
+
+        String userIdToolbar = "";
+        if (fap.getCurrentUid().equals(userHome)) userIdToolbar = userAway;
+        else userIdToolbar = userHome;
+
+        up.getUser(userIdToolbar).addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                if (documentSnapshot.contains("username"))
+                    textViewUsernameChat.setText(documentSnapshot.getString("username"));
+                if (documentSnapshot.contains("photoProfile")) {
+                    String photoProfile = documentSnapshot.getString("photoProfile");
+                    if (photoProfile != null && !photoProfile.isEmpty())
+                        new Utils.ImageDownloadTasK(photoProfileChatImageView).execute(photoProfile);
+                }
+
+            }
+        });
     }
 
     private void createChat() {
@@ -114,10 +151,13 @@ public class ChatActivity extends AppCompatActivity {
         chat.setTyping(false);
         chat.setTimestamp(new Date().getTime());
         chat.setId(userHome + userAway);
+        chatId = userHome + userAway;
         ArrayList<String> ids = new ArrayList<>();
         ids.add(userHome);
         ids.add(userAway);
         chat.setIds(ids);
-        cp.createChat(chat);
+        cp.createChat(chat).addOnSuccessListener(unused -> {
+
+        });
     }
 }
