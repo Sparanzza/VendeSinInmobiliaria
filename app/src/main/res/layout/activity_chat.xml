@@ -12,12 +12,14 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/msgChatRecyclerView"
         android:layout_width="match_parent"
+        android:layout_marginVertical="55dp"
         android:layout_height="match_parent"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="@color/white"
         android:layout_gravity="bottom">
 
         <EditText
@@ -26,6 +28,7 @@
             android:layout_height="wrap_content"
             android:hint="Write here..."
             android:layout_weight="1"
+            android:textColorHint="@color/primary"
             android:inputType="textMultiLine"/>
 
         <ImageView

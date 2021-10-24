@@ -12,12 +12,19 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.Query;
 import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.Utils.Utils;
+import com.ilerna.vendesininmobiliarias.adapters.MessagesAdapter;
+import com.ilerna.vendesininmobiliarias.adapters.UserPostAdapter;
 import com.ilerna.vendesininmobiliarias.models.Chat;
 import com.ilerna.vendesininmobiliarias.models.Message;
+import com.ilerna.vendesininmobiliarias.models.Post;
 import com.ilerna.vendesininmobiliarias.providers.ChatsProvider;
 import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
 import com.ilerna.vendesininmobiliarias.providers.MessagesProvider;
@@ -46,6 +53,10 @@ public class ChatActivity extends AppCompatActivity {
     ImageView photoProfileChatImageView;
     ImageView backChatImageView;
 
+    RecyclerView msgChatRecyclerView;
+
+    MessagesAdapter messagesAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +70,10 @@ public class ChatActivity extends AppCompatActivity {
 
         messageEditText = findViewById(R.id.messageEditText);
         sendMessageImageView = findViewById(R.id.sendMessageImageView);
+        msgChatRecyclerView = findViewById(R.id.msgChatRecyclerView);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
+        msgChatRecyclerView.setLayoutManager(linearLayoutManager);
 
         userHome = getIntent().getStringExtra("userHome");
         userAway = getIntent().getStringExtra("userAway");
@@ -69,6 +84,24 @@ public class ChatActivity extends AppCompatActivity {
             sendMessage();
         });
         existChat();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Query query = mp.getMsgsFromChat(chatId);
+        FirestoreRecyclerOptions<Message> options =
+                new FirestoreRecyclerOptions.Builder<Message>()
+                        .setQuery(query, Message.class).build();
+        messagesAdapter = new MessagesAdapter(options, ChatActivity.this);
+        msgChatRecyclerView.setAdapter(messagesAdapter);
+        messagesAdapter.startListening(); // Start listening from FireStore database
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        messagesAdapter.stopListening();
     }
 
     private void sendMessage() {
@@ -92,6 +125,7 @@ public class ChatActivity extends AppCompatActivity {
         mp.createMessage(message).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 messageEditText.setText("");
+                messagesAdapter.notifyDataSetChanged();
                 Toast.makeText(this, "sended Ok!", Toast.LENGTH_SHORT).show();
             } else Toast.makeText(this, "Error sending message", Toast.LENGTH_SHORT).show();
         });

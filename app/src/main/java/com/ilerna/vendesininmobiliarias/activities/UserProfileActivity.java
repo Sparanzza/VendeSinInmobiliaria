@@ -69,9 +69,6 @@ public class UserProfileActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-
-
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(UserProfileActivity.this);
         postsProfileRecyclerView.setLayoutManager(linearLayoutManager);
 
