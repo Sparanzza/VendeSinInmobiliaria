@@ -1,40 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="10dp"
-    android:orientation="horizontal"
-    android:paddingLeft="15dp"
-    android:paddingTop="10dp"
-    android:paddingRight="15dp"
-    android:background="@color/primary"
-    android:paddingBottom="10dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="10dp"
+    android:paddingHorizontal="30dp">
 
-    <TextView
-        android:id="@+id/messageTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="New Message"
-        android:textColor="@color/white"
-        android:textSize="15dp" />
-
-    <TextView
-        android:id="@+id/dateMessageTextView"
+    <LinearLayout
+        android:id="@+id/messageLinearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="5dp"
-        android:text="Date"
-        android:textColor="@color/white"
-        android:textSize="12dp" />
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/primary"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp">
 
-    <ImageView
-        android:id="@+id/messageCheckdimageView"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_gravity="bottom"
-        app:tint="@color/primary_muted"
-        android:src="@drawable/ic_check" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/messageTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="New Message"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/dateMessageTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="5dp"
+            android:text="Date"
+            android:textColor="@color/white"
+            android:textSize="12dp" />
+
+        <ImageView
+            android:id="@+id/messageCheckdimageView"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_gravity="bottom"
+            android:src="@drawable/ic_check"
+            app:tint="@color/secondary" />
+    </LinearLayout>
+    </RelativeLayout>

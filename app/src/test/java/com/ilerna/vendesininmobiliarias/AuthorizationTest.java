@@ -22,4 +22,3 @@ import org.junit.Test;
         assertEquals(isEmailAddressValid("usuario@ilernaonline.com"), "Correct email");
         assertEquals(!isEmailAddressValid("usuario_ilernaonline.com"), "This is not a correct email");
     }
-}

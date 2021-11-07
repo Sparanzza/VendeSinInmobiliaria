@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,6 +42,27 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<Message, MessagesA
         // final String messageId = document.getId();
         holder.messageTextView.setText(model.getText());
         holder.dateMessageTextView.setText(Utils.getTimeAgo(model.getTimestamp()));
+
+        if (model.getSenderId().equals(fap.getCurrentUid())) {
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            holder.messageLinearLayout.setLayoutParams(params);
+            holder.messageLinearLayout.setBackgroundColor(context.getResources().getColor(R.color.primary));
+            holder.messageCheckdimageView.setVisibility(View.VISIBLE);
+        }
+        else {
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            holder.messageLinearLayout.setLayoutParams(params);
+            holder.messageLinearLayout.setBackgroundColor(context.getResources().getColor(R.color.primary_muted));
+            holder.messageCheckdimageView.setVisibility(View.GONE);
+        }
     }
 
     @NonNull
@@ -51,6 +74,7 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<Message, MessagesA
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
+        LinearLayout messageLinearLayout;
         TextView messageTextView;
         TextView dateMessageTextView;
         ImageView messageCheckdimageView;
@@ -61,6 +85,7 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<Message, MessagesA
             messageTextView = view.findViewById(R.id.messageTextView);
             dateMessageTextView = view.findViewById(R.id.dateMessageTextView);
             messageCheckdimageView = view.findViewById(R.id.messageCheckdimageView);
+            messageLinearLayout = view.findViewById(R.id.messageLinearLayout);
             viewHolder = view;
             up = new UsersProvider();
             fap = new FirebaseAuthProvider();
