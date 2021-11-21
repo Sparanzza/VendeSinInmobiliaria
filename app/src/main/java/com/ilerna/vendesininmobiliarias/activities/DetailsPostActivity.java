@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.Utils.CategoriesEnum;
@@ -98,6 +99,8 @@ public class DetailsPostActivity extends AppCompatActivity {
 
     String userUid;
     String postId;
+
+    ListenerRegistration listenerRegistration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,9 +250,15 @@ public class DetailsPostActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (listenerRegistration != null) listenerRegistration.remove();
+    }
+
     private void getPostById(String id) {
         // number likes
-        lp.getLikeByPost(postId).addSnapshotListener((querySnapshot, exception) -> {
+        listenerRegistration = lp.getLikeByPost(postId).addSnapshotListener((querySnapshot, exception) -> {
             int numberLikes = querySnapshot.size();
             if (numberLikes <= 1) likesPostTextView.setText(numberLikes + " Like");
             else likesPostTextView.setText(numberLikes + " Likes");

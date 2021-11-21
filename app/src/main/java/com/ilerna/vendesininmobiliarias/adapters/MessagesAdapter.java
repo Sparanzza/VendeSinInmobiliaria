@@ -63,6 +63,9 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<Message, MessagesA
             holder.messageLinearLayout.setBackgroundColor(context.getResources().getColor(R.color.primary_muted));
             holder.messageCheckdimageView.setVisibility(View.GONE);
         }
+
+        if (model.isChecked()) holder.messageCheckdimageView.setVisibility(View.VISIBLE);
+        else holder.messageCheckdimageView.setVisibility(View.GONE);
     }
 
     @NonNull

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.Utils.Utils;
@@ -43,6 +44,8 @@ public class UserProfileActivity extends AppCompatActivity {
     RecyclerView postsProfileRecyclerView;
     UserPostAdapter userPostAdapter;
     FloatingActionButton chatFab;
+
+    ListenerRegistration listenerRegistration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +103,14 @@ public class UserProfileActivity extends AppCompatActivity {
         userPostAdapter.stopListening();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (listenerRegistration != null) listenerRegistration.remove();
+    }
+
     private void getUserProfile() {
-        pp.getAllPostByUser(userProfileId).addSnapshotListener((querySnapshot, exception) -> {
+        listenerRegistration = pp.getAllPostByUser(userProfileId).addSnapshotListener((querySnapshot, exception) -> {
             if (querySnapshot.size() > 0) {
                 existPostUserProfileTextView.setText(querySnapshot.size() + " Posts");
             } else {

@@ -18,7 +18,9 @@ import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.Utils.Utils;
 import com.ilerna.vendesininmobiliarias.activities.ChatActivity;
 import com.ilerna.vendesininmobiliarias.models.Chat;
+import com.ilerna.vendesininmobiliarias.providers.ChatsProvider;
 import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
+import com.ilerna.vendesininmobiliarias.providers.MessagesProvider;
 import com.ilerna.vendesininmobiliarias.providers.UsersProvider;
 
 public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.ViewHolder> {
@@ -26,11 +28,17 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
     View view;
     Context context;
     UsersProvider up;
+    ChatsProvider cp;
+    MessagesProvider mp;
     FirebaseAuthProvider fap;
 
     public ChatsAdapter(FirestoreRecyclerOptions<Chat> options, Context context) {
         super(options);
         this.context = context;
+        up = new UsersProvider();
+        fap = new FirebaseAuthProvider();
+        cp = new ChatsProvider();
+        mp = new MessagesProvider();
     }
 
     @Override
@@ -48,6 +56,14 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
             intent.putExtra("userAway", model.getUserAway());
             intent.putExtra("chatId", chatId);
             context.startActivity(intent);
+        });
+
+        mp.getLastMsg(chatId).get().addOnSuccessListener(querySnapshot -> {
+            if (querySnapshot.size() > 0) {
+                holder.lastMsgCardViewChatsTextView.setText(querySnapshot.getDocuments().get(0).getString("text"));
+            } else {
+                holder.lastMsgCardViewChatsTextView.setText("No message");
+            }
         });
     }
 
@@ -85,8 +101,6 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
             lastMsgCardViewChatsTextView = view.findViewById(R.id.lastMsgCardViewChatsTextView);
             photoCardViewChatsImageView = view.findViewById(R.id.photoCardViewChatsImageView);
             viewHolder = view;
-            up = new UsersProvider();
-            fap = new FirebaseAuthProvider();
         }
     }
 

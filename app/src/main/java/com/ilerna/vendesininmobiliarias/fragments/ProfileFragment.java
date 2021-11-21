@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.Utils.Utils;
@@ -54,6 +55,8 @@ public class ProfileFragment extends Fragment {
     TextView emailProfileTextView;
     TextView totalPostsProfileTextView;
     RecyclerView postsProfileRecyclerView;
+
+    ListenerRegistration listenerRegistration;
 
     ImagesProvider ip;
     UsersProvider up;
@@ -112,6 +115,12 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (listenerRegistration != null) listenerRegistration.remove();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -146,7 +155,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void getUserProfile() {
-        pp.getAllPostByUser(fap.getCurrentUid()).addSnapshotListener((querySnapshot, exception) -> {
+        listenerRegistration = pp.getAllPostByUser(fap.getCurrentUid()).addSnapshotListener((querySnapshot, exception) -> {
             if (querySnapshot.size() > 0) {
                 existPostProfileTextView.setText(querySnapshot.size() + " Posts");
             } else {

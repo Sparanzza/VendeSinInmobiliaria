@@ -30,6 +30,7 @@ import com.ilerna.vendesininmobiliarias.models.Post;
 import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
 import com.ilerna.vendesininmobiliarias.providers.PostsProvider;
 import com.ilerna.vendesininmobiliarias.providers.TokensProvider;
+import com.ilerna.vendesininmobiliarias.providers.UsersProvider;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -39,6 +40,7 @@ public class HomeActivity extends AppCompatActivity {
     PostsAdapter postsAdapter;
     PostsProvider pp;
     TokensProvider tp;
+    UsersProvider up;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class HomeActivity extends AppCompatActivity {
         fap = new FirebaseAuthProvider();
         pp = new PostsProvider();
         tp = new TokensProvider();
+        up = new UsersProvider();
 
         createToken();
     }
@@ -110,6 +113,19 @@ public class HomeActivity extends AppCompatActivity {
     private void search() {
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // update online user status
+        up.updateChatOnline(true, fap.getCurrentUid());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        up.updateChatOnline(false, fap.getCurrentUid());
+    }
 
     private void logout() {
         fap.logout();

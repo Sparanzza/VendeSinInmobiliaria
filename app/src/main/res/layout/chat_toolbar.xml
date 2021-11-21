@@ -52,6 +52,6 @@
         android:layout_below="@+id/textViewUsernameChat"
         android:layout_toRightOf="@+id/cardImageProfileChat"
         android:maxLines="1"
-        android:text="a momment ago"
+        android:text=""
         android:textSize="12dp" />
 </RelativeLayout>

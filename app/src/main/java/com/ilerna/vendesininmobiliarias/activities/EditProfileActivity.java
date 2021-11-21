@@ -97,7 +97,7 @@ public class EditProfileActivity extends AppCompatActivity {
             data.put("phoneNumber", phoneNumber);
             data.put("timestamp", new Date().getTime());
             data.put("photoProfile", urlImageUploaded);
-            up.update(data, fap.getCurrentUid()).addOnCompleteListener(task -> {
+            up.updateUser(data, fap.getCurrentUid()).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(this, "User updated successfully", Toast.LENGTH_SHORT).show();
                 } else {

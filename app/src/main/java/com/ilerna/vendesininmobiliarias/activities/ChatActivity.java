@@ -1,6 +1,7 @@
 package com.ilerna.vendesininmobiliarias.activities;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,15 +10,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.ilerna.vendesininmobiliarias.R;
 import com.ilerna.vendesininmobiliarias.Utils.Utils;
 import com.ilerna.vendesininmobiliarias.adapters.MessagesAdapter;
@@ -26,12 +35,15 @@ import com.ilerna.vendesininmobiliarias.models.Chat;
 import com.ilerna.vendesininmobiliarias.models.Message;
 import com.ilerna.vendesininmobiliarias.models.Post;
 import com.ilerna.vendesininmobiliarias.providers.ChatsProvider;
+import com.ilerna.vendesininmobiliarias.providers.FCMProvider;
 import com.ilerna.vendesininmobiliarias.providers.FirebaseAuthProvider;
 import com.ilerna.vendesininmobiliarias.providers.MessagesProvider;
+import com.ilerna.vendesininmobiliarias.providers.TokensProvider;
 import com.ilerna.vendesininmobiliarias.providers.UsersProvider;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -43,6 +55,11 @@ public class ChatActivity extends AppCompatActivity {
     MessagesProvider mp;
     FirebaseAuthProvider fap;
     UsersProvider up;
+    FCMProvider FCMp;
+    TokensProvider tp;
+
+    Long notificationId;
+
     View actionBarView;
 
     EditText messageEditText;
@@ -56,6 +73,7 @@ public class ChatActivity extends AppCompatActivity {
     RecyclerView msgChatRecyclerView;
     MessagesAdapter messagesAdapter;
     LinearLayoutManager linearLayoutManager;
+    ListenerRegistration listenerRegistration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +84,8 @@ public class ChatActivity extends AppCompatActivity {
         mp = new MessagesProvider();
         up = new UsersProvider();
         fap = new FirebaseAuthProvider();
+        FCMp = new FCMProvider();
+        tp = new TokensProvider();
 
         messageEditText = findViewById(R.id.messageEditText);
         sendMessageImageView = findViewById(R.id.sendMessageImageView);
@@ -98,6 +118,12 @@ public class ChatActivity extends AppCompatActivity {
         messagesAdapter.stopListening();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (listenerRegistration != null) listenerRegistration.remove();
+    }
+
     private void getChat() {
         Query query = mp.getMsgsFromChat(chatId);
         FirestoreRecyclerOptions<Message> options =
@@ -106,10 +132,11 @@ public class ChatActivity extends AppCompatActivity {
         messagesAdapter = new MessagesAdapter(options, ChatActivity.this);
         msgChatRecyclerView.setAdapter(messagesAdapter);
         messagesAdapter.startListening(); // Start listening from FireStore database
-        messagesAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        messagesAdapter.registerAdapterDataObserver(new AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
+                viewCheckedMessage();
                 int numberMessage = messagesAdapter.getItemCount();
                 int lastMsgPosition = linearLayoutManager.findLastVisibleItemPosition();
                 if (lastMsgPosition == -1 || (positionStart >= (numberMessage - 1) && lastMsgPosition == (positionStart - 1))) {
@@ -141,6 +168,7 @@ public class ChatActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 messageEditText.setText("");
                 messagesAdapter.notifyDataSetChanged();
+                sendChatNotificaiton(messageText);
                 Toast.makeText(this, "sended Ok!", Toast.LENGTH_SHORT).show();
             } else Toast.makeText(this, "Error sending message", Toast.LENGTH_SHORT).show();
         });
@@ -153,9 +181,33 @@ public class ChatActivity extends AppCompatActivity {
             } else {
                 chatId = querySnapshot.getDocuments().get(0).getId();
                 getChat();
+                viewCheckedMessage();
+                notificationId = querySnapshot.getDocuments().get(0).getLong("notificationId");
             }
         });
     }
+
+    private void viewCheckedMessage() {
+        mp.getMsgsFromChat(chatId, fap.getCurrentUid().equals(userHome) ? userAway : userHome).get().addOnSuccessListener(querySnapshot -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                querySnapshot.getDocuments().forEach(documentSnapshot -> mp.updateChecked(documentSnapshot.getId(), true));
+            }
+        });
+    }
+
+    private void sendChatNotificaiton(String message) {
+        String userUid;
+        if (fap.getCurrentUid().equals(userHome)) userUid = userAway;
+        else userUid = userHome;
+
+        tp.getToken(userUid).addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists() && documentSnapshot.contains("token")) {
+                String token = documentSnapshot.getString("token");
+                FCMp.createFCMChat( message, token, notificationId);
+            }
+        });
+        Toast.makeText(this, "Created comment successfully!", Toast.LENGTH_SHORT).show();
+}
 
     private void showToolbar(int chat_toolbar) {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -182,10 +234,18 @@ public class ChatActivity extends AppCompatActivity {
         if (fap.getCurrentUid().equals(userHome)) userIdToolbar = userAway;
         else userIdToolbar = userHome;
 
-        up.getUser(userIdToolbar).addOnSuccessListener(documentSnapshot -> {
+        listenerRegistration = up.getUserDocumentRef(userIdToolbar).addSnapshotListener((documentSnapshot, error) -> {
             if (documentSnapshot.exists()) {
                 if (documentSnapshot.contains("username"))
                     textViewUsernameChat.setText(documentSnapshot.getString("username"));
+                if (documentSnapshot.contains("isOnline")) {
+                    boolean isOnline = documentSnapshot.getBoolean("isOnline");
+                    if (isOnline) {
+                        timeChatTextView.setText("Online");
+                    } else {
+                        timeChatTextView.setText("Offline");
+                    }
+                }
                 if (documentSnapshot.contains("photoProfile")) {
                     String photoProfile = documentSnapshot.getString("photoProfile");
                     if (photoProfile != null && !photoProfile.isEmpty())
@@ -200,6 +260,9 @@ public class ChatActivity extends AppCompatActivity {
         Chat chat = new Chat();
         chat.setUserHome(userHome);
         chat.setUserAway(userAway);
+        int nChat = new Random().nextInt(99999);
+        chat.setNotificationId(nChat);
+        notificationId = Long.valueOf(nChat);
         chat.setTyping(false);
         chat.setTimestamp(new Date().getTime());
         chat.setId(userHome + userAway);
@@ -209,7 +272,7 @@ public class ChatActivity extends AppCompatActivity {
         ids.add(userAway);
         chat.setIds(ids);
         cp.createChat(chat).addOnSuccessListener(unused -> {
-
+            getChat();
         });
     }
 }

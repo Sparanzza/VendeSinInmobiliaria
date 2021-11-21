@@ -10,17 +10,20 @@ public class Chat {
     private boolean isTyping;
     private long timestamp;
     private ArrayList<String> ids;
+    private int notificationId;
 
     public Chat() {
     }
 
-    public Chat(String id, String userHome, String userAway, boolean isTyping, long timestamp, ArrayList<String> ids) {
+
+    public Chat(String id, String userHome, String userAway, boolean isTyping, long timestamp, ArrayList<String> ids, int notificationId) {
         this.id = id;
         this.userHome = userHome;
         this.userAway = userAway;
         this.isTyping = isTyping;
         this.timestamp = timestamp;
         this.ids = ids;
+        this.notificationId = notificationId;
     }
 
     public String getId() {
@@ -69,5 +72,13 @@ public class Chat {
 
     public void setIds(ArrayList<String> ids) {
         this.ids = ids;
+    }
+
+    public int getNotificationId() {
+        return notificationId;
+    }
+
+    public void setNotificationId(int notificationId) {
+        this.notificationId = notificationId;
     }
 }
